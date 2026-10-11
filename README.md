@@ -96,8 +96,8 @@ KecerdasanBuatanUTS/
 
 1. **Clone repository**:
    ```bash
-   git clone https://github.com/ItsKarr007/KecerdasanBuatanUTS.git
-   cd KecerdasanBuatanUTS
+   git clone https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS.git
+   cd KecerdasaBuatanUTS
    ```
 
 2. **Buat dan aktifkan virtual environment**:
@@ -126,7 +126,7 @@ KecerdasanBuatanUTS/
 
 ## ☁️ Panduan Lengkap Deployment ke PythonAnywhere (WAJIB)
 
-Target deployment aplikasi ini adalah **PythonAnywhere** (akun gratis). Ikuti langkah-langkah terstruktur di bawah ini. Ganti `USERNAME` dengan username akun PythonAnywhere Anda:
+Target deployment aplikasi ini adalah **PythonAnywhere** (akun gratis). Ikuti langkah-langkah terstruktur di bawah ini untuk akun **rima**:
 
 ### 1. Buka Bash Console di PythonAnywhere
 Masuk ke dasbor PythonAnywhere, buka menu **Consoles** > pilih **Bash**.
@@ -134,19 +134,18 @@ Masuk ke dasbor PythonAnywhere, buka menu **Consoles** > pilih **Bash**.
 ### 2. Clone Repository GitHub
 Jalankan perintah clone ke direktori home:
 ```bash
-git clone https://github.com/ItsKarr007/KecerdasanBuatanUTS.git
+git clone https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS.git
 ```
 
 ### 3. Buat Virtual Environment & Install Dependensi
 ```bash
-mkvirtualenv --python=python3.10 myenv
-cd ~/KecerdasanBuatanUTS
+mkvirtualenv --python=python3.12 myenv
+cd ~/KecerdasaBuatanUTS
 pip install -r requirements.txt
 ```
-*(Catatan: Anda dapat menyesuaikan versi Python misalnya `--python=python3.10` atau `--python=python3.11` sesuai versi yang tersedia di akun PythonAnywhere Anda).*
 
 ### 4. Latih Model di Server PythonAnywhere
-Jalankan script pelatihan agar model `.joblib` dan plot grafik di `.png` dibuat sesuai versi scikit-learn di server:
+Jalankan script pelatihan agar model `.joblib` dan plot grafik dibuat sesuai lingkungan server:
 ```bash
 python train.py
 ```
@@ -155,22 +154,22 @@ python train.py
 1. Buka tab **Web** pada navbar dashboard PythonAnywhere.
 2. Klik tombol **Add a new web app**.
 3. Pilih opsi **Manual configuration** (jangan pilih wizard Flask otomatis).
-4. Pilih versi Python yang sama persis dengan yang Anda gunakan saat membuat virtualenv (misal Python 3.10).
+4. Pilih versi Python yang sama: **Python 3.12**.
 
 ### 6. Atur Path Direktori dan Virtualenv
 Pada tab **Web**:
-- **Source code**: `/home/USERNAME/KecerdasanBuatanUTS`
-- **Working directory**: `/home/USERNAME/KecerdasanBuatanUTS`
-- **Virtualenv**: `/home/USERNAME/.virtualenvs/myenv`
+- **Source code**: `/home/rima/KecerdasaBuatanUTS`
+- **Working directory**: `/home/rima/KecerdasaBuatanUTS`
+- **Virtualenv**: `/home/rima/.virtualenvs/myenv`
 
 ### 7. Konfigurasi Berkas WSGI
-Pada tab **Web**, klik tautan berkas **WSGI configuration file** (biasanya bernama `/var/www/USERNAME_pythonanywhere_com_wsgi.py`). Hapus seluruh isinya, lalu ganti dengan kode berikut:
+Pada tab **Web**, klik tautan berkas **WSGI configuration file** (`/var/www/rima_pythonanywhere_com_wsgi.py`). Hapus seluruh isinya, lalu ganti dengan kode berikut:
 ```python
 import sys
 import os
 
 # Menambahkan direktori proyek ke sys.path
-path = "/home/USERNAME/KecerdasanBuatanUTS"
+path = "/home/rima/KecerdasaBuatanUTS"
 if path not in sys.path:
     sys.path.insert(0, path)
 
@@ -185,12 +184,12 @@ Klik tombol **Save** (Ctrl+S).
 ### 8. Atur Direktori Static Files
 Pada bagian **Static files** di tab **Web**, tambahkan pemetaan berkas statis:
 - **URL**: `/static/`
-- **Directory**: `/home/USERNAME/KecerdasanBuatanUTS/static`
+- **Directory**: `/home/rima/KecerdasaBuatanUTS/static`
 
 ### 9. Reload Web App
-Klik tombol hijau besar bertuliskan **Reload USERNAME.pythonanywhere.com**.
+Klik tombol hijau besar bertuliskan **Reload rima.pythonanywhere.com**.
 Aplikasi Anda sekarang aktif dan dapat diakses online di:
-`https://USERNAME.pythonanywhere.com`
+`https://rima.pythonanywhere.com`
 
 ---
 
@@ -199,7 +198,7 @@ Aplikasi Anda sekarang aktif dan dapat diakses online di:
 Jika ada perubahan kode di GitHub yang ingin ditarik ke server:
 1. Buka **Consoles** > **Bash**:
    ```bash
-   cd ~/KecerdasanBuatanUTS
+   cd ~/KecerdasaBuatanUTS
    git pull origin main
    ```
 2. Buka tab **Web** dan klik tombol **Reload**.
@@ -211,9 +210,9 @@ Jika ada perubahan kode di GitHub yang ingin ditarik ke server:
 | Masalah yang Sering Muncul | Penyebab Utama | Solusi |
 |---|---|---|
 | **Error 500 / Something went wrong** | Kesalahan impor modul atau path file | Buka tab **Web** > lihat bagian **Log files** > klik **Error log**. Cek pesan galat baris terakhir. |
-| **ModuleNotFoundError** (misal: `No module named 'flask'`) | Path Virtualenv belum diisi atau salah | Pastikan field **Virtualenv** di tab Web berisi `/home/USERNAME/.virtualenvs/myenv`. |
-| **FileNotFoundError** saat membaca data/model | Working directory belum diatur | Pastikan field **Working directory** diisi `/home/USERNAME/KecerdasanBuatanUTS` dan berkas `train.py` sudah dijalankan. |
-| **Gambar grafik atau CSS tidak muncul** | Konfigurasi Static files belum dipetakan | Periksa pemetaan URL `/static/` ke `/home/USERNAME/KecerdasanBuatanUTS/static` di tab Web. |
+| **ModuleNotFoundError** (misal: `No module named 'flask'`) | Path Virtualenv belum diisi atau salah | Pastikan field **Virtualenv** di tab Web berisi `/home/rima/.virtualenvs/myenv`. |
+| **FileNotFoundError** saat membaca data/model | Working directory belum diatur | Pastikan field **Working directory** diisi `/home/rima/KecerdasaBuatanUTS` dan berkas `train.py` sudah dijalankan. |
+| **Gambar grafik atau CSS tidak muncul** | Konfigurasi Static files belum dipetakan | Periksa pemetaan URL `/static/` ke `/home/rima/KecerdasaBuatanUTS/static` di tab Web. |
 | **Perubahan kode tidak terlihat di browser** | Belum melakukan Reload | Setiap setelah melakukan `git pull` atau edit berkas, wajib klik tombol hijau **Reload** di tab Web. |
 | **Aplikasi dinonaktifkan setelah 3 bulan** | Kebijakan akun gratis PythonAnywhere | Masuk ke tab **Web** dan klik tombol **Run until 3 months from today** secara berkala. |
 
@@ -221,6 +220,6 @@ Jika ada perubahan kode di GitHub yang ingin ditarik ke server:
 
 ## 👨‍💻 Pengembang & Repository
 
-- **Repository**: [https://github.com/ItsKarr007/KecerdasanBuatanUTS](https://github.com/ItsKarr007/KecerdasanBuatanUTS)
+- **Repository**: [https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS](https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS)
 - Dibuat untuk memenuhi Tugas Ujian Tengah Semester Kecerdasan Buatan.
 
