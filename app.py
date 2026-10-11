@@ -391,3 +391,4 @@ def download_batch_result():
 if __name__ == '__main__':
     # Pastikan app.run() HANYA berjalan di dalam blok __name__ == '__main__'
     app.run(host='0.0.0.0', port=5000, debug=True)
+

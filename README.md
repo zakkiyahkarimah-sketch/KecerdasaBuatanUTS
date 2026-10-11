@@ -223,3 +223,4 @@ Jika ada perubahan kode di GitHub yang ingin ditarik ke server:
 
 - **Repository**: [https://github.com/ItsKarr007/KecerdasanBuatanUTS](https://github.com/ItsKarr007/KecerdasanBuatanUTS)
 - Dibuat untuk memenuhi Tugas Ujian Tengah Semester Kecerdasan Buatan.
+
