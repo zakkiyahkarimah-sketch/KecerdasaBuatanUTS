@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Beranda - Klasifikasi Prestasi Matematika Siswa{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Banner -->
+    <div class="hero-section mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-warning text-dark mb-2 px-3 py-2 fw-bold">
+                    <i class="bi bi-journal-text me-1"></i> Implementasi Publikasi Ilmiah RIGGS (2026)
+                </span>
+                <h1 class="display-6 fw-bold mb-3">
+                    Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree
+                </h1>
+                <p class="lead text-light mb-3" style="opacity: 0.95;">
+                    Pengembangan sistem cerdas berbasis web untuk mengklasifikasikan capaian akademik siswa ke dalam kategori 
+                    <strong>Rendah</strong> (0-9), <strong>Sedang</strong> (10-14), dan <strong>Tinggi</strong> (15-20) 
+                    berdasarkan dataset Student Performance (UCI Machine Learning Repository).
+                </p>
+                <div class="d-flex flex-wrap gap-2 pt-2">
+                    <a href="{{ url_for('prediksi_view') }}" class="btn btn-warning fw-bold px-4 py-2 shadow-sm">
+                        <i class="bi bi-magic me-1"></i> Coba Prediksi Sekarang
+                    </a>
+                    <a href="{{ url_for('uji_baru_view') }}" class="btn btn-outline-light px-4 py-2">
+                        <i class="bi bi-check2-circle me-1"></i> Uji 10 Data Baru
+                    </a>
+                    <a href="{{ url_for('evaluasi_view') }}" class="btn btn-outline-light px-4 py-2">
+                        <i class="bi bi-graph-up me-1"></i> Lihat Evaluasi Model
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <div class="bg-white bg-opacity-10 p-4 rounded-4 border border-white border-opacity-25 shadow-sm">
+                    <i class="bi bi-mortarboard-fill display-1 text-warning mb-2"></i>
+                    <h5 class="fw-bold mb-1">Student Performance</h5>
+                    <p class="small text-light mb-0">Bagian Matematika (395 Siswa, 32 Fitur Prediktor)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow-sm stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small fw-semibold">AKURASI JURNAL (ORANGE)</div>
+                            <div class="fs-3 fw-bold text-primary">{{ "%.1f"|format(metrics.jurnal_reference.accuracy * 100) }}%</div>
+                            <div class="small text-muted">10-Fold CV (344/395 benar)</div>
+                        </div>
+                        <div class="bg-primary-subtle text-primary p-3 rounded-circle">
+                            <i class="bi bi-award fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow-sm stat-card success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small fw-semibold">AKURASI TEST (SKLEARN)</div>
+                            <div class="fs-3 fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}%</div>
+                            <div class="small text-muted">Evaluasi Data Uji 20% (77 siswa)</div>
+                        </div>
+                        <div class="bg-success-subtle text-success p-3 rounded-circle">
+                            <i class="bi bi-check-circle fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow-sm stat-card warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small fw-semibold">10-FOLD CV KAMI</div>
+                            <div class="fs-3 fw-bold text-warning">{{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}%</div>
+                            <div class="small text-muted">Stratified K-Fold Scikit-Learn</div>
+                        </div>
+                        <div class="bg-warning-subtle text-warning p-3 rounded-circle">
+                            <i class="bi bi-shuffle fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 shadow-sm stat-card danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small fw-semibold">FITUR PREDIKTOR</div>
+                            <div class="fs-3 fw-bold text-danger">32 Variabel</div>
+                            <div class="small text-muted">G3 dibuang (Cegah Leakage)</div>
+                        </div>
+                        <div class="bg-danger-subtle text-danger p-3 rounded-circle">
+                            <i class="bi bi-shield-check fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Cards Grid -->
+    <h4 class="fw-bold mb-3 d-flex align-items-center gap-2">
+        <i class="bi bi-grid-fill text-primary"></i> Modul dan Alur Kerja Sistem
+    </h4>
+    <div class="row g-4 mb-4">
+        <!-- Dataset Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-database-fill text-primary fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">1. Dataset Matematika</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Eksplorasi dataset 395 siswa dari UCI Machine Learning Repository. Dilengkapi deskripsi 5 kelompok variabel dan grafik distribusi target.
+                    </p>
+                    <a href="{{ url_for('dataset_view') }}" class="btn btn-sm btn-outline-primary fw-semibold">
+                        Buka Halaman Dataset <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preprocessing Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-funnel-fill text-info fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">2. Preprocessing Data</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Tahapan pembentukan target Kategori_G3, pencegahan kebocoran data (drop G3), OneHotEncoding, dan pemisahan eksplisit 10 data baru.
+                    </p>
+                    <a href="{{ url_for('preprocessing_view') }}" class="btn btn-sm btn-outline-info fw-semibold">
+                        Lihat Tahapan Preprocessing <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pelatihan Model Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-warning">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-diagram-2-fill text-warning fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">3. Pelatihan Model</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Konfigurasi Decision Tree (max_depth=5, min_leaf=5), model pembanding MLP, visualisasi pohon keputusan, serta tombol latih ulang model.
+                    </p>
+                    <a href="{{ url_for('training_view') }}" class="btn btn-sm btn-outline-warning fw-semibold">
+                        Pelatihan & Pohon Keputusan <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluasi Model Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-card-checklist text-success fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">4. Evaluasi & Analisis</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Confusion matrix heatmap, akurasi, precision, recall, F1-score, tabel classification report, serta panduan membaca metrik dalam Bahasa Indonesia.
+                    </p>
+                    <a href="{{ url_for('evaluasi_view') }}" class="btn btn-sm btn-outline-success fw-semibold">
+                        Lihat Hasil Evaluasi <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediksi Mandiri Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-input-cursor-text text-primary fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">5. Prediksi (Single & Batch)</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Form input interaktif 32 fitur dengan validasi dan nilai default, serta fasilitas upload file CSV untuk prediksi massal dengan ekspor CSV.
+                    </p>
+                    <a href="{{ url_for('prediksi_view') }}" class="btn btn-sm btn-outline-primary fw-semibold">
+                        Form Prediksi Siswa <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uji Data Baru Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-hover border-top border-4 border-danger">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-check2-all text-danger fs-3"></i>
+                        <h5 class="card-title fw-bold mb-0">6. Pengujian Data Baru</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Uji 10 baris data independen yang belum pernah dilihat model sebelumnya, menampilkan perbandingan label aktual vs hasil prediksi.
+                    </p>
+                    <a href="{{ url_for('uji_baru_view') }}" class="btn btn-sm btn-outline-danger fw-semibold">
+                        Uji 10 Data Baru <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paper & Methodology Context -->
+    <div class="card shadow-sm border-0 bg-white">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h5 class="fw-bold mb-2 text-dark">
+                        <i class="bi bi-bookmark-star-fill text-warning me-1"></i> Tentang Jurnal Acuan
+                    </h5>
+                    <p class="text-muted small mb-2">
+                        <strong>Judul:</strong> <em>Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree pada Dataset Student Performance</em><br>
+                        <strong>Penulis:</strong> Elisabeth Jessica Sitanggang, Yeheskiel Ravena Damanik, Esther Laura Rumahorbo, Albert Adolf Angie MS<br>
+                        <strong>Jurnal:</strong> RIGGS (Journal of Artificial Intelligence and Digital Business), Vol. 5 No. 2 (2026), pp. 22774-22783. DOI: 10.31004/riggs.v5i2.12193
+                    </p>
+                    <p class="small text-secondary mb-0">
+                        Penelitian ini membuktikan bahwa Decision Tree mampu menghasilkan model klasifikasi multikelas yang akurat (akurasi 87,1%) dan sangat mudah diinterpretasikan oleh tenaga pendidik untuk mendeteksi siswa yang berisiko memperoleh prestasi rendah sedini mungkin setelah nilai evaluasi periode pertama (G1) dan kedua (G2) tersedia.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center mt-3 mt-lg-0">
+                    <div class="p-3 bg-light rounded-3 border">
+                        <div class="fw-bold text-dark small mb-1">Target Klasifikasi (Kategori_G3)</div>
+                        <div class="d-flex justify-content-center gap-1">
+                            <span class="badge badge-rendah px-2 py-1">Rendah (0 - 9)</span>
+                            <span class="badge badge-sedang px-2 py-1">Sedang (10 - 14)</span>
+                            <span class="badge badge-tinggi px-2 py-1">Tinggi (15 - 20)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

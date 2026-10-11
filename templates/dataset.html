@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Eksplorasi Dataset - Student Performance (Matematika){% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="bi bi-database text-primary me-2"></i>Eksplorasi Dataset Siswa</h2>
+            <p class="text-muted mb-0">Informasi karakteristik, deskripsi atribut, preview data, dan distribusi target prestasi matematika.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('download_raw_dataset') }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-download me-1"></i> Unduh student-mat.csv
+            </a>
+        </div>
+    </div>
+
+    <!-- Ringkasan Dataset -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm stat-card">
+                <div class="card-body">
+                    <div class="text-muted small fw-semibold">SUMBER DATASET</div>
+                    <div class="fs-5 fw-bold text-dark">UCI ML Repository</div>
+                    <div class="small text-muted">Student Performance (Kaggle)</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm stat-card success">
+                <div class="card-body">
+                    <div class="text-muted small fw-semibold">JUMLAH BARIS & KOLOM</div>
+                    <div class="fs-5 fw-bold text-success">{{ total_rows }} Baris &times; {{ total_cols }} Kolom</div>
+                    <div class="small text-muted">Format CSV (Pemisah titik koma ';')</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm stat-card warning">
+                <div class="card-body">
+                    <div class="text-muted small fw-semibold">KUALITAS DATA</div>
+                    <div class="fs-5 fw-bold text-warning">0 Missing & 0 Duplikasi</div>
+                    <div class="small text-muted">Dataset bersih dan lengkap</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card shadow-sm stat-card danger">
+                <div class="card-body">
+                    <div class="text-muted small fw-semibold">TARGET KLASIFIKASI</div>
+                    <div class="fs-5 fw-bold text-danger">Kategori_G3 (3 Kelas)</div>
+                    <div class="small text-muted">Rendah, Sedang, Tinggi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Distribusi Target & Grafik -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-pie-chart-fill text-primary"></i> Grafik Distribusi Kelas Target (Kategori_G3)
+                </div>
+                <div class="card-body text-center p-3">
+                    <img src="{{ url_for('static', filename='plots/distribusi_target.png') }}" class="img-fluid rounded shadow-sm" alt="Grafik Distribusi Target">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-table text-primary"></i> Tabel Distribusi Frekuensi Target
+                </div>
+                <div class="card-body p-3">
+                    <table class="table table-bordered table-hover align-middle mb-3">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Rentang Nilai G3</th>
+                                <th>Jumlah Siswa</th>
+                                <th>Persentase</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-rendah px-2 py-1">Rendah</span></td>
+                                <td>0 &ndash; 9</td>
+                                <td class="fw-bold">{{ target_dist.get('Rendah', 0) }}</td>
+                                <td>{{ "%.1f"|format((target_dist.get('Rendah', 0) / total_rows) * 100) }}%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sedang px-2 py-1">Sedang</span></td>
+                                <td>10 &ndash; 14</td>
+                                <td class="fw-bold">{{ target_dist.get('Sedang', 0) }}</td>
+                                <td>{{ "%.1f"|format((target_dist.get('Sedang', 0) / total_rows) * 100) }}%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-tinggi px-2 py-1">Tinggi</span></td>
+                                <td>15 &ndash; 20</td>
+                                <td class="fw-bold">{{ target_dist.get('Tinggi', 0) }}</td>
+                                <td>{{ "%.1f"|format((target_dist.get('Tinggi', 0) / total_rows) * 100) }}%</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="table-group-divider fw-bold">
+                            <tr>
+                                <td colspan="2">Total Data</td>
+                                <td>{{ total_rows }}</td>
+                                <td>100.0%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="alert alert-info small mb-0">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        <strong>Catatan Ketidakseimbangan:</strong> Kelas <em>Sedang</em> merupakan kelas mayoritas (48,6%), disusul <em>Rendah</em> (32,9%), dan <em>Tinggi</em> (18,5%). Validasi silang terstratifikasi (Stratified K-Fold) digunakan untuk menjaga proporsi kelas pada setiap lipatan evaluasi.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deskripsi Variabel Berdasarkan Jurnal (Tabel 1) -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <i class="bi bi-card-text text-primary"></i> Tabel Deskripsi Kelompok Variabel (Sesuai Tabel 1 Jurnal RIGGS)
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 22%;">Kelompok Variabel</th>
+                            <th style="width: 38%;">Variabel / Atribut</th>
+                            <th>Deskripsi Karakteristik</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold text-primary">1. Demografis</td>
+                            <td><code>school, sex, age, address</code></td>
+                            <td>Identitas sekolah (GP / MS), jenis kelamin (F / M), usia siswa (15-22 tahun), dan tipe alamat tempat tinggal (Urban / Rural).</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">2. Latar Belakang Keluarga</td>
+                            <td><code>famsize, Pstatus, Medu, Fedu, Mjob, Fjob, guardian</code></td>
+                            <td>Ukuran keluarga (LE3 / GT3), status tinggal orang tua (Tersendiri / Bersama), tingkat pendidikan ibu & ayah (0-4), pekerjaan orang tua (guru, kesehatan, layanan, di rumah, lainnya), serta wali resmi siswa (ibu, ayah, lainnya).</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">3. Sekolah dan Dukungan Pembelajaran</td>
+                            <td><code>reason, traveltime, studytime, failures, schoolsup, famsup, paid, activities, nursery, higher, internet</code></td>
+                            <td>Alasan memilih sekolah, waktu perjalanan ke sekolah, waktu belajar mandiri mingguan, riwayat kegagalan kelas sebelumnya, dukungan pendidikan sekolah & keluarga, les berbayar tambahan, kegiatan ekstrakurikuler, riwayat PAUD/TK, minat kuliah tinggi, dan akses koneksi internet di rumah.</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">4. Sosial dan Perilaku</td>
+                            <td><code>romantic, famrel, freetime, goout, Dalc, Walc, health, absences</code></td>
+                            <td>Status hubungan asmara siswa, kualitas hubungan keluarga (1-5), waktu luang (1-5), frekuensi keluar bersama teman (1-5), konsumsi alkohol hari kerja (Dalc) & akhir pekan (Walc) (1-5), status kesehatan (1-5), dan total jumlah ketidakhadiran (absensi).</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold text-primary">5. Penilaian Akademik</td>
+                            <td><code>G1, G2, G3</code></td>
+                            <td>Nilai ujian periode pertama (G1: skala 0-20), nilai ujian periode kedua (G2: skala 0-20), dan nilai ujian akhir matematika (G3: skala 0-20).</td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td class="fw-bold text-danger">Target Turunan</td>
+                            <td><code>Kategori_G3</code></td>
+                            <td><strong>Kelas Target Klasifikasi:</strong> Dibentuk dari nilai akhir G3 menjadi <strong>Rendah</strong> (0-9), <strong>Sedang</strong> (10-14), dan <strong>Tinggi</strong> (15-20). G3 asli dibuang dari fitur prediktor.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview 10 Baris Pertama -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex justify-content-between align-items-center">
+            <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-eye-fill text-primary"></i> Preview 10 Baris Pertama Dataset Asli (student-mat.csv)
+            </span>
+            <span class="badge bg-secondary">Menampilkan 10 dari {{ total_rows }} Baris</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive" style="max-height: 480px;">
+                <table class="table table-sm table-striped table-hover mb-0 text-nowrap small">
+                    <thead class="table-dark sticky-top">
+                        <tr>
+                            <th>#</th>
+                            {% for col in preview_columns %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in preview_data %}
+                            <tr>
+                                <td class="fw-bold">{{ loop.index }}</td>
+                                {% for col in preview_columns %}
+                                    {% if col == 'Kategori_G3' %}
+                                        <td>
+                                            {% if row[col] == 'Rendah' %}
+                                                <span class="badge badge-rendah">Rendah</span>
+                                            {% elif row[col] == 'Sedang' %}
+                                                <span class="badge badge-sedang">Sedang</span>
+                                            {% else %}
+                                                <span class="badge badge-tinggi">Tinggi</span>
+                                            {% endif %}
+                                        </td>
+                                    {% else %}
+                                        <td>{{ row[col] }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

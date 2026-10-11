@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Tahapan Preprocessing Data - Klasifikasi Prestasi Siswa{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1"><i class="bi bi-funnel-fill text-primary me-2"></i>Tahapan Prapemrosesan Data (Preprocessing)</h2>
+        <p class="text-muted mb-0">Dokumentasi alur transformasi data mentah menjadi bentuk fitur siap latih dengan perbandingan Sebelum (Before) dan Sesudah (After).</p>
+    </div>
+
+    <!-- Stepper Pipeline Overview -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 1</div>
+                <div class="fw-bold small">Labeling Target</div>
+                <div class="text-muted small">G3 &rarr; Kategori_G3</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 2</div>
+                <div class="fw-bold small">Cegah Leakage</div>
+                <div class="text-muted small">Drop kolom G3</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 3</div>
+                <div class="fw-bold small">Pembersihan Data</div>
+                <div class="text-muted small">Cek Missing & Duplikat</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 4</div>
+                <div class="fw-bold small">Isolasi Data Baru</div>
+                <div class="text-muted small">Sisihkan 10 baris acak</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 5</div>
+                <div class="fw-bold small">Split Train-Test</div>
+                <div class="text-muted small">80% Train : 20% Test</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6">
+            <div class="card bg-white border text-center p-2 h-100 shadow-sm">
+                <div class="badge bg-primary rounded-pill mb-1">Langkah 6</div>
+                <div class="fw-bold small">Encoding Pipeline</div>
+                <div class="text-muted small">ColumnTransformer</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Pembentukan Variabel Target -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-circle p-2">1</span>
+            <span>Pembentukan Variabel Target (Kategori_G3)</span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-3">
+                Sesuai metodologi jurnal, nilai akhir ujian matematika <code>G3</code> (skala 0-20) dikelompokkan ke dalam tiga kategori prestasi belajar untuk tugas klasifikasi multikelas:
+            </p>
+            <div class="row g-3 text-center mb-3">
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 bg-danger bg-opacity-10 border-danger">
+                        <span class="badge badge-rendah fs-6 mb-2">Rendah</span>
+                        <div class="fw-bold text-dark">Rentang Nilai G3: 0 &ndash; 9</div>
+                        <div class="small text-muted mt-1">Siswa memerlukan intervensi khusus / remediasi</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 bg-warning bg-opacity-10 border-warning">
+                        <span class="badge badge-sedang fs-6 mb-2">Sedang</span>
+                        <div class="fw-bold text-dark">Rentang Nilai G3: 10 &ndash; 14</div>
+                        <div class="small text-muted mt-1">Siswa memenuhi standar ketuntasan minimal</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 bg-success bg-opacity-10 border-success">
+                        <span class="badge badge-tinggi fs-6 mb-2">Tinggi</span>
+                        <div class="fw-bold text-dark">Rentang Nilai G3: 15 &ndash; 20</div>
+                        <div class="small text-muted mt-1">Siswa berprestasi unggul dalam matematika</div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Kondisi (Before)</th>
+                            <th>Transformasi Logika</th>
+                            <th>Hasil Kategori (After)</th>
+                            <th>Distribusi Data (395 Siswa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>G3 &le; 9</code></td>
+                            <td><code>score &lt;= 9 &rarr; 'Rendah'</code></td>
+                            <td><span class="badge badge-rendah">Rendah</span></td>
+                            <td><strong>130 siswa</strong> (32,9%)</td>
+                        </tr>
+                        <tr>
+                            <td><code>10 &le; G3 &le; 14</code></td>
+                            <td><code>10 &lt;= score &lt;= 14 &rarr; 'Sedang'</code></td>
+                            <td><span class="badge badge-sedang">Sedang</span></td>
+                            <td><strong>192 siswa</strong> (48,6%)</td>
+                        </tr>
+                        <tr>
+                            <td><code>G3 &ge; 15</code></td>
+                            <td><code>score &gt;= 15 &rarr; 'Tinggi'</code></td>
+                            <td><span class="badge badge-tinggi">Tinggi</span></td>
+                            <td><strong>73 siswa</strong> (18,5%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Pencegahan Kebocoran Data (Data Leakage) -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-circle p-2">2</span>
+            <span>Pencegahan Kebocoran Data (Data Leakage Prevention)</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                <i class="bi bi-shield-exclamation fs-4"></i>
+                <div>
+                    <h6 class="fw-bold mb-1">Mengapa kolom G3 harus dibuang?</h6>
+                    <p class="mb-0 small">
+                        Karena <code>Kategori_G3</code> diturunkan secara langsung dari <code>G3</code>, mempertahankan nilai numerik G3 di dalam kumpulan fitur prediktor akan menyebabkan <em>data leakage</em> (model hanya membaca nilai G3 untuk menebak kategori dengan akurasi 100% palsu tanpa belajar pola demografis, perilaku, dan nilai sebelumnya).
+                    </p>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <div class="fw-bold text-danger mb-2"><i class="bi bi-x-circle me-1"></i> Sebelum (Before): 33 Kolom Asli</div>
+                        <p class="small text-muted mb-1">Semua atribut input + G3 berada dalam tabel data mentah.</p>
+                        <code>school, sex, age, ..., absences, G1, G2, <strong class="text-danger">G3</strong></code>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 bg-light">
+                        <div class="fw-bold text-success mb-2"><i class="bi bi-check-circle me-1"></i> Sesudah (After): 32 Fitur + 1 Target</div>
+                        <p class="small text-muted mb-1">G3 dibuang dari X. Nilai G1 dan G2 tetap dipertahankan sebagai capaian awal.</p>
+                        <code>X: [32 Fitur (G1, G2, demografis, keluarga, sosial)] &rarr; y: [Kategori_G3]</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Pengecekan Missing Value & Duplikasi -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-circle p-2">3</span>
+            <span>Pengecekan Nilai Hilang (Missing Values) dan Duplikasi Baris</span>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Pengecekan Missing Values (NaN/Null)</div>
+                                <div class="fs-4 fw-bold text-success">0 Nilai Hilang</div>
+                                <div class="small text-muted">df.isnull().sum().sum() = {{ metrics.split_info.missing_values }}</div>
+                            </div>
+                            <i class="bi bi-clipboard-check-fill text-success fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small">Pengecekan Duplikasi Baris (Duplicate Rows)</div>
+                                <div class="fs-4 fw-bold text-success">0 Duplikasi</div>
+                                <div class="small text-muted">df.duplicated().sum() = {{ metrics.split_info.duplicates }}</div>
+                            </div>
+                            <i class="bi bi-layers-fill text-success fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="small text-muted mt-3 mb-0">
+                <i class="bi bi-info-circle me-1"></i> Sesuai dengan konfigurasi pada Tabel 2 Jurnal RIGGS, dataset Student Performance matematika terkonfirmasi bersih dan lengkap tanpa missing value, sehingga tidak memerlukan tahap imputasi nilai hilang.
+            </p>
+        </div>
+    </div>
+
+    <!-- 4 & 5. Pemisahan Data Baru dan Train-Test Split -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-circle p-2">4 & 5</span>
+            <span>Pemisahan Data Baru Eksplisit & Pembagian Train-Test (80:20)</span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-3">
+                Untuk menjamin pengujian yang objektif dan realistis pada skenario dunia nyata, data dibagi menjadi tiga bagian secara terisolasi:
+            </p>
+            <div class="table-responsive mb-3">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Bagian Data</th>
+                            <th>Proporsi / Jumlah</th>
+                            <th>Peran dalam Sistem</th>
+                            <th>Distribusi Target (Rendah / Sedang / Tinggi)</th>
+                            <th>Status Akses Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-danger table-opacity-10">
+                            <td class="fw-bold text-danger">Data Baru Independen</td>
+                            <td class="fw-bold">10 Baris (2,5%)</td>
+                            <td>Disimpan di <code>data/data_baru.csv</code> (random_state=42)</td>
+                            <td>
+                                Rendah: {{ metrics.split_info.data_baru_dist.get('Rendah', 0) }} | 
+                                Sedang: {{ metrics.split_info.data_baru_dist.get('Sedang', 0) }} | 
+                                Tinggi: {{ metrics.split_info.data_baru_dist.get('Tinggi', 0) }}
+                            </td>
+                            <td><span class="badge bg-danger">TIDAK PERNAH DILIHAT MODEL</span></td>
+                        </tr>
+                        <tr class="table-primary table-opacity-10">
+                            <td class="fw-bold text-primary">Training Set</td>
+                            <td class="fw-bold">308 Baris (80% dari sisa 385)</td>
+                            <td>Digunakan untuk fit/pembelajaran pohon keputusan</td>
+                            <td>
+                                Rendah: {{ metrics.split_info.train_dist.get('Rendah', 0) }} | 
+                                Sedang: {{ metrics.split_info.train_dist.get('Sedang', 0) }} | 
+                                Tinggi: {{ metrics.split_info.train_dist.get('Tinggi', 0) }}
+                            </td>
+                            <td><span class="badge bg-primary">Dipakai Melatih Model</span></td>
+                        </tr>
+                        <tr class="table-success table-opacity-10">
+                            <td class="fw-bold text-success">Testing Set</td>
+                            <td class="fw-bold">77 Baris (20% dari sisa 385)</td>
+                            <td>Digunakan untuk evaluasi metrik akurasi & confusion matrix</td>
+                            <td>
+                                Rendah: {{ metrics.split_info.test_dist.get('Rendah', 0) }} | 
+                                Sedang: {{ metrics.split_info.test_dist.get('Sedang', 0) }} | 
+                                Tinggi: {{ metrics.split_info.test_dist.get('Tinggi', 0) }}
+                            </td>
+                            <td><span class="badge bg-success">Dipakai Validasi Akhir</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="small text-muted">
+                <strong>Catatan Stratifikasi:</strong> Pembagian data sisa 80:20 dilakukan menggunakan <code>stratify=y</code> dengan <code>random_state=42</code> guna menjaga rasio kelas target pada data training dan testing sama persis dengan proporsi aslinya.
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Scikit-Learn Pipeline & ColumnTransformer -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <span class="badge bg-primary rounded-circle p-2">6</span>
+            <span>Pipeline Scikit-Learn dan ColumnTransformer</span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-3">
+                Agar transformasi data saat pelatihan dan saat prediksi masukan baru konsisten secara otomatis tanpa risiko kebocoran, digunakan <code>ColumnTransformer</code> dan <code>Pipeline</code>:
+            </p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100 border p-3">
+                        <h6 class="fw-bold text-primary mb-2">Fitur Kategorikal (17 Kolom)</h6>
+                        <p class="small text-muted mb-2">
+                            Ditransformasi menggunakan <code>OneHotEncoder(handle_unknown='ignore', sparse_output=False)</code>.
+                        </p>
+                        <div class="bg-light p-2 rounded small text-break" style="font-family: monospace;">
+                            school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardian, schoolsup, famsup, paid, activities, nursery, higher, internet, romantic
+                        </div>
+                        <div class="mt-2 small text-muted">
+                            <em>Before:</em> Teks label (misal 'yes'/'no', 'GP'/'MS', 'services', dll.)<br>
+                            <em>After:</em> Matriks biner 0 dan 1 (dummy variables).
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border p-3">
+                        <h6 class="fw-bold text-primary mb-2">Fitur Numerik (15 Kolom)</h6>
+                        <p class="small text-muted mb-2">
+                            Diproses menggunakan <code>passthrough</code> untuk Decision Tree (karena pohon keputusan kebal terhadap skala fitur) dan <code>StandardScaler</code> untuk MLPClassifier.
+                        </p>
+                        <div class="bg-light p-2 rounded small text-break" style="font-family: monospace;">
+                            age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime, goout, Dalc, Walc, health, absences, G1, G2
+                        </div>
+                        <div class="mt-2 small text-muted">
+                            <em>Before:</em> Angka bulat dalam rentang beragam (misal absensi 0-75, nilai 0-20)<br>
+                            <em>After:</em> Diteruskan apa adanya untuk Decision Tree / dinormalisasi (mean=0, std=1) untuk MLP.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
