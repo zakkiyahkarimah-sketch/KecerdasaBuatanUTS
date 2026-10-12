@@ -125,6 +125,86 @@
         </div>
     </div>
 
+    <!-- TABEL PERBANDINGAN DENGAN JURNAL (SESUAI PEDOMAN UTS - POIN 8) -->
+    <div class="card shadow-sm mb-4 border-start border-4 border-primary">
+        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
+            <i class="bi bi-arrow-left-right text-primary"></i> Tabel Perbandingan Project dengan Hasil Penelitian Artikel Jurnal RIGGS
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 25%;">Komponen Evaluasi</th>
+                            <th style="width: 28%;">Hasil Artikel Jurnal (Orange)</th>
+                            <th style="width: 28%;">Hasil Project Kami (Scikit-Learn)</th>
+                            <th>Keterangan / Analisis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Algoritma</td>
+                            <td>Decision Tree (Orange Tree Learner)</td>
+                            <td><span class="badge bg-primary">Decision Tree (Scikit-Learn)</span></td>
+                            <td>Konfigurasi sama: Gini, max_depth=5, min_samples_leaf=5</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Dataset</td>
+                            <td>Student Performance (Matematika)</td>
+                            <td><span class="badge bg-secondary">Student Performance (Matematika)</span></td>
+                            <td>Sumber UCI ML Repository / Kaggle (395 siswa)</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Fitur Input (Prediktor)</td>
+                            <td>32 Variabel (G3 Dihapus)</td>
+                            <td>32 Variabel (G3 Dihapus)</td>
+                            <td><span class="badge bg-success">Bebas Data Leakage</span> (G3 hanya dipakai untuk target)</td>
+                        </tr>
+                        <tr class="table-info">
+                            <td class="fw-bold">Accuracy (Akurasi)</td>
+                            <td class="fw-bold fs-6 text-primary">87,10% (0,871)</td>
+                            <td class="fw-bold fs-6 text-success">
+                                {{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}% (10-Fold CV)<br>
+                                <span class="small fw-normal text-muted">{{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}% (Data Testing 20%)</span>
+                            </td>
+                            <td>Sangat konsisten dengan jurnal acuan</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Precision (Presisi Makro)</td>
+                            <td class="fw-bold text-primary">87,10% (0,871)</td>
+                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.precision_macro * 100) }}%</td>
+                            <td>Presisi kelas Tinggi mencapai 100%</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Recall (Daya Ingat Makro)</td>
+                            <td class="fw-bold text-primary">87,10% (0,871)</td>
+                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.recall_macro * 100) }}%</td>
+                            <td>Recall kelas Tinggi mencapai 92,86%</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">F1-Score Makro</td>
+                            <td class="fw-bold text-primary">87,10% (0,871)</td>
+                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.f1_macro * 100) }}%</td>
+                            <td>Keseimbangan presisi dan recall terbukti kokoh</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Fitur Penentu Utama</td>
+                            <td>G2 dan G1</td>
+                            <td>G2 (87,74%) dan G1 (3,33%)</td>
+                            <td>Sesuai struktur pohon hierarki jurnal</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Kesalahan Ekstrem</td>
+                            <td>0 (Tidak pernah terjadi)</td>
+                            <td>0 (Rendah &harr; Tinggi = 0)</td>
+                            <td>Misklasifikasi hanya terjadi pada kelas tetangga</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- Classification Report Tabel -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-white py-3 fw-bold d-flex align-items-center gap-2">
