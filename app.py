@@ -385,6 +385,16 @@ def download_batch_result():
     )
 
 
+@app.route('/download/laporan-pdf')
+def download_laporan_pdf():
+    """Mengunduh Laporan Resmi Komparasi Hasil Project vs Jurnal (PDF)"""
+    pdf_path = os.path.join(BASE_DIR, 'Laporan_Komparasi_Hasil_UTS.pdf')
+    if not os.path.exists(pdf_path):
+        import subprocess
+        subprocess.run(['python', os.path.join(BASE_DIR, 'generate_pdf_report.py')])
+    return send_file(pdf_path, as_attachment=True, download_name='Laporan_Komparasi_Hasil_UTS.pdf')
+
+
 # ==========================================================
 # MENJALANKAN APLIKASI SECARA LOKAL
 # ==========================================================

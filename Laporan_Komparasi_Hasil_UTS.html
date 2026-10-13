@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Laporan Komparasi Hasil Project vs Jurnal RIGGS - UTS Kecerdasan Buatan</title>
+<style>
+    @page {
+        size: A4;
+        margin: 20mm 18mm 20mm 18mm;
+    }
+    body {
+        font-family: 'Liberation Sans', 'DejaVu Sans', Arial, Helvetica, sans-serif;
+        color: #1e293b;
+        line-height: 1.5;
+        font-size: 11pt;
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+    h1, h2, h3, h4 {
+        color: #0f172a;
+        font-weight: bold;
+    }
+    .header-box {
+        border-bottom: 3px double #2563eb;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    .title-main {
+        font-size: 16pt;
+        font-weight: 800;
+        color: #1e3a8a;
+        margin: 0 0 8px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .subtitle-main {
+        font-size: 12pt;
+        font-weight: 600;
+        color: #475569;
+        margin: 0 0 10px 0;
+    }
+    .meta-box {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 9.5pt;
+        margin-bottom: 20px;
+    }
+    .meta-box table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .meta-box td {
+        padding: 3px 6px;
+        vertical-align: top;
+    }
+    .meta-box td.label {
+        font-weight: bold;
+        width: 25%;
+        color: #334155;
+    }
+    .section-title {
+        font-size: 13pt;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        color: #1e3a8a;
+        background-color: #f1f5f9;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    p {
+        margin-bottom: 10px;
+        text-align: justify;
+    }
+    .alert-box {
+        background-color: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        padding: 10px 14px;
+        margin: 14px 0;
+        border-radius: 4px;
+        font-size: 10pt;
+    }
+    .alert-box.warning {
+        background-color: #fefce8;
+        border-left-color: #eab308;
+    }
+    .alert-box.success {
+        background-color: #f0fdf4;
+        border-left-color: #22c55e;
+    }
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0 20px 0;
+        font-size: 9.5pt;
+    }
+    table.data-table th, table.data-table td {
+        border: 1px solid #cbd5e1;
+        padding: 8px 10px;
+        text-align: left;
+    }
+    table.data-table th {
+        background-color: #1e3a8a;
+        color: #ffffff;
+        font-weight: bold;
+        text-align: center;
+    }
+    table.data-table tr:nth-child(even) {
+        background-color: #f8fafc;
+    }
+    table.data-table tr.highlight {
+        background-color: #e0f2fe;
+        font-weight: bold;
+    }
+    .badge {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 8.5pt;
+        font-weight: bold;
+    }
+    .badge-success { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .badge-primary { background-color: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .badge-warning { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+    .page-break {
+        page-break-after: always;
+    }
+    .figure-container {
+        text-align: center;
+        margin: 18px 0;
+        page-break-inside: avoid;
+    }
+    .figure-container img {
+        max-width: 92%;
+        height: auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .figure-caption {
+        font-size: 9pt;
+        font-weight: bold;
+        color: #475569;
+        margin-top: 6px;
+    }
+    ol, ul {
+        margin-top: 5px;
+        margin-bottom: 12px;
+        padding-left: 24px;
+    }
+    li {
+        margin-bottom: 6px;
+        text-align: justify;
+    }
+</style>
+</head>
+<body>
+
+    <!-- KOP & IDENTITAS LAPORAN -->
+    <div class="header-box">
+        <div class="title-main">Laporan Analisis Komparasi Hasil Project vs Jurnal Acuan</div>
+        <div class="subtitle-main">Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree</div>
+        <div style="font-size: 10pt; color: #64748b;">Mata Kuliah: Kecerdasan Buatan (Ujian Tengah Semester 2026)</div>
+    </div>
+
+    <div class="meta-box">
+        <table>
+            <tr>
+                <td class="label">Artikel Jurnal Acuan:</td>
+                <td>Sitanggang, E. J., Damanik, Y. R., Rumahorbo, E. L., & MS, A. A. A. (2026). <em>Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree pada Dataset Student Performance</em>. <strong>RIGGS: Journal of Artificial Intelligence and Digital Business</strong>, 5(2), 22774–22783. DOI: 10.31004/riggs.v5i2.12193</td>
+            </tr>
+            <tr>
+                <td class="label">Repository GitHub:</td>
+                <td><a href="https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS">https://github.com/zakkiyahkarimah-sketch/KecerdasaBuatanUTS</a></td>
+            </tr>
+            <tr>
+                <td class="label">Aplikasi Web Deployment:</td>
+                <td><a href="https://rima.pythonanywhere.com">https://rima.pythonanywhere.com</a></td>
+            </tr>
+            <tr>
+                <td class="label">Alat & Framework:</td>
+                <td>Python 3.12, Flask, Scikit-Learn 1.9.1, Pandas, Matplotlib, Seaborn (Web Cloud: PythonAnywhere)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 1. RINGKASAN EKSEKUTIF PEMENUHAN 5 KRITERIA UTS -->
+    <div class="section-title">1. Ringkasan Pemenuhan 5 Kriteria Penilaian UTS</div>
+    <p>Project ini mengembangkan aplikasi web cerdas klasifikasi yang mereplikasi metodologi riset jurnal RIGGS. Seluruh 5 poin krusial rubrik evaluasi telah dipenuhi secara penuh:</p>
+    
+    <div class="alert-box warning">
+        <strong>1. Bebas Data Leakage (Kolom G3 Dihapus):</strong> Atribut nilai akhir <code>G3</code> sama sekali <strong>TIDAK dimasukkan</strong> sebagai fitur masukan (prediktor). Nilai G3 murni dipakai untuk melabeli kelas target <code>Kategori_G3</code> (Rendah: 0–9, Sedang: 10–14, Tinggi: 15–20). Prediksi model murni menggunakan 32 variabel profil siswa dan nilai awal (G1 & G2).
+    </div>
+
+    <div class="alert-box success">
+        <strong>2. Evaluasi Model Lengkap:</strong> Model Decision Tree diuji menggunakan 10-Fold Stratified Cross Validation dan data pengujian independen (Testing 20%). Metrik yang dihasilkan: <strong>Accuracy = 85,33% (CV) / 83,12% (Test)</strong>, <strong>Precision Macro = 86,02%</strong>, <strong>Recall Macro = 84,36%</strong>, <strong>F1-Score = 85,14%</strong>, serta Heatmap Confusion Matrix.
+    </div>
+
+    <div class="alert-box">
+        <strong>3. Pengujian Data Baru:</strong> Menyediakan <strong>Formulir Input Manual Interaktif</strong> untuk 32 fitur (dengan preset contoh 1-klik) yang langsung mengeluarkan kategori prestasi (Rendah / Sedang / Tinggi) beserta estimasi probabilitasnya. Selain itu, terdapat halaman khusus yang menguji <strong>10 data acak independen</strong> (<code>data_baru.csv</code>) dengan tingkat ketepatan 7/10 benar.
+    </div>
+
+    <div class="alert-box">
+        <strong>4. Visualisasi Pohon Keputusan (plot_tree):</strong> Struktur pohon keputusan divisualisasikan menggunakan <code>sklearn.tree.plot_tree()</code> resolusi tinggi dan grafik <em>Feature Importance</em> untuk menjamin interpretabilitas model (keterbukaan aturan keputusan).
+    </div>
+
+    <div class="alert-box">
+        <strong>5. Tabel Perbandingan dengan Artikel Jurnal:</strong> Disajikan perbandingan eksplisit antara hasil perangkat lunak Orange pada jurnal dengan hasil model Python Scikit-Learn pada project ini.
+    </div>
+
+    <!-- 2. TABEL PERBANDINGAN LENGKAP -->
+    <div class="section-title">2. Tabel Komparasi Hasil Penelitian Jurnal vs Hasil Project</div>
+    <p>Berikut adalah perbandingan kuantitatif dan teknis antara hasil penelitian pada artikel jurnal referensi dengan hasil eksperimen pada project ini:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 26%;">Komponen Evaluasi</th>
+                <th style="width: 27%;">Hasil Artikel Jurnal (Orange)</th>
+                <th style="width: 27%;">Hasil Project Kami (Scikit-Learn)</th>
+                <th style="width: 20%;">Analisis / Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Algoritma</strong></td>
+                <td>Decision Tree (Orange Tree Learner)</td>
+                <td><span class="badge badge-primary">Decision Tree (Scikit-Learn)</span></td>
+                <td>Parameter sama: Gini, depth=5, leaf=5</td>
+            </tr>
+            <tr>
+                <td><strong>Dataset</strong></td>
+                <td>Student Performance (Matematika)</td>
+                <td>Student Performance (Matematika)</td>
+                <td>UCI Machine Learning Repository (395 siswa)</td>
+            </tr>
+            <tr>
+                <td><strong>Target Klasifikasi</strong></td>
+                <td>Kategori_G3 (3 Kelas diskrit)</td>
+                <td>Kategori_G3 (3 Kelas diskrit)</td>
+                <td>Rendah (0–9), Sedang (10–14), Tinggi (15–20)</td>
+            </tr>
+            <tr>
+                <td><strong>Fitur Masukan (Prediktor)</strong></td>
+                <td>32 Variabel (G3 Dihapus)</td>
+                <td>32 Variabel (G3 Dihapus)</td>
+                <td><span class="badge badge-success">Bebas Data Leakage</span></td>
+            </tr>
+            <tr class="highlight">
+                <td><strong>Accuracy (Akurasi)</strong></td>
+                <td><strong>87,10%</strong> (344/395 benar)</td>
+                <td><strong>85,33% ± 2,89%</strong> (10-Fold CV)<br><strong>83,12%</strong> (Data Test 20%)</td>
+                <td>Sangat mendekati jurnal (selisih minor ~1,7%)</td>
+            </tr>
+            <tr>
+                <td><strong>Precision (Presisi Makro)</strong></td>
+                <td><strong>87,10%</strong> (0,871)</td>
+                <td><strong>86,02%</strong> (0,860)</td>
+                <td>Presisi kelas Tinggi mencapai 100%</td>
+            </tr>
+            <tr>
+                <td><strong>Recall (Daya Ingat Makro)</strong></td>
+                <td><strong>87,10%</strong> (0,871)</td>
+                <td><strong>84,36%</strong> (0,844)</td>
+                <td>Recall kelas Tinggi mencapai 92,86%</td>
+            </tr>
+            <tr>
+                <td><strong>F1-Score Makro</strong></td>
+                <td><strong>87,10%</strong> (0,871)</td>
+                <td><strong>85,14%</strong> (0,851)</td>
+                <td>Keseimbangan performa antar-kelas sangat stabil</td>
+            </tr>
+            <tr>
+                <td><strong>Fitur Penentu Utama</strong></td>
+                <td>G2 (akar pohon) dan G1</td>
+                <td>G2 (87,74%) dan G1 (3,33%)</td>
+                <td>Identik: capaian awal menjadi prediktor paling dominan</td>
+            </tr>
+            <tr>
+                <td><strong>Kesalahan Ekstrem</strong></td>
+                <td>0 kasus (Rendah &harr; Tinggi = 0)</td>
+                <td>0 kasus (Rendah &harr; Tinggi = 0)</td>
+                <td>Tidak pernah terjadi kesalahan fatal pada kategori ekstrim</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- 3. PEMBAHASAN MENDALAM: PERSAMAAN, PERBEDAAN & PENYEBAB -->
+    <div class="section-title">3. Pembahasan Mendalam: Persamaan, Perbedaan, dan Penyebab Perbedaan</div>
+
+    <h3>3.1. Persamaan Antara Hasil Project dan Jurnal</h3>
+    <ol>
+        <li><strong>Integritas Prapemrosesan Bebas Kebocoran Data (Data Leakage):</strong> Baik jurnal maupun project ini menerapkan prinsip pembersihan data yang identik, yaitu membuang kolom nilai akhir ujian matematika ($G3$) sebelum proses pelatihan model. Hal ini menjamin bahwa model belajar dari pola profil siswa dan capaian penilaian awal ($G1$ dan $G2$), bukan membaca jawaban target secara langsung.</li>
+        <li><strong>Struktur Hirarki Pohon & Atribut Pemisah Utama:</strong> Pada kedua model, algoritma Decision Tree menempatkan nilai periode kedua ($G2$) sebagai simpul pemisah paling atas (*root node*) dengan kontribusi kepentingan lebih dari 87%, yang diikuti oleh nilai periode pertama ($G1$). Ini membuktikan keselarasan temuan ilmiah bahwa capaian evaluasi awal memiliki korelasi kausal terkuat terhadap prestasi akhir siswa.</li>
+        <li><strong>Pola Kesalahan Bebas Kasus Ekstrem:</strong> Berdasarkan analisis Confusion Matrix, kedua model sama sekali tidak pernah melakukan kesalahan prediksi ekstrem (jumlah misklasifikasi antara kategori Rendah $\leftrightarrow$ Tinggi adalah 0). Semua kekeliruan prediksi hanya terjadi pada batas kelas yang bersebelahan (Rendah $\leftrightarrow$ Sedang atau Sedang $\leftrightarrow$ Tinggi), yang mencerminkan sifat kontinu dari sebaran nilai siswa.</li>
+        <li><strong>Keseimbangan Metrik Evaluasi:</strong> Seluruh metrik evaluasi (Akurasi, Presisi, Recall, dan F1-Score) berada pada rentang yang seimbang dan tinggi (83% – 87%), membuktikan bahwa algoritma Decision Tree mampu menangani ketidakseimbangan kelas (*class imbalance*) pada dataset secara baik tanpa mengalami bias berlebih ke kelas mayoritas (*Sedang*).</li>
+    </ol>
+
+    <h3>3.2. Perbedaan Antara Hasil Project dan Jurnal</h3>
+    <ol>
+        <li><strong>Perbedaan Perangkat Lunak Implementasi:</strong> Jurnal menggunakan perangkat lunak *Orange Data Mining* berbasis alur visual (GUI) yang memproses model secara otomatis di kanvas data mining. Sedangkan project ini diimplementasikan menggunakan bahasa pemrograman **Python 3.12** dengan pustaka **Scikit-Learn** dan disajikan dalam bentuk aplikasi web berbasis **Flask** yang dideploy secara publik di cloud **PythonAnywhere**.</li>
+        <li><strong>Variansi Nilai Akurasi:</strong> Akurasi 10-fold cross validation pada jurnal adalah 87,10% (344/395 data benar). Pada project Scikit-Learn kami, akurasi 10-fold CV pada 395 data mencapai 85,33% ± 2,89% dan akurasi pada pengujian 20% data uji (*test hold-out*) adalah 83,12%. Terdapat selisih minor sekitar 1,7% – 2,4%.</li>
+        <li><strong>Strategi Pembagian Data:</strong> Jurnal menguji model hanya melalui 10-fold cross validation pada keseluruhan 395 data. Pada project ini, dilakukan simulasi dunia nyata yang lebih ketat dengan menyisihkan secara acak **10 baris data independen** (<code>data_baru.csv</code>) sebelum proses *train-test split* 80:20 dilakukan.</li>
+    </ol>
+
+    <h3>3.3. Kemungkinan Penyebab Perbedaan Hasil</h3>
+    <p>Selisih kecil pada metrik akurasi (~1,7%) dapat dijelaskan secara ilmiah melalui faktor-faktor teknis berikut:</p>
+    <ol>
+        <li><strong>Kriteria Penghentian Mayoritas 95% pada Orange:</strong> Pada jurnal, widget Tree Orange memiliki pengaturan khusus: <em>"Stop when majority reaches 95%"</em> (pembagian cabang simpul langsung berhenti jika 95% data dalam simpul sudah homogen/berasal dari satu kelas). Fitur ini merupakan mekanisme pemangkasan dini (*early stopping*) bawaan Orange yang tidak ada padanan langsungnya dalam parameter baku <code>DecisionTreeClassifier</code> Scikit-Learn. Perbedaan pemangkasan ini menyebabkan struktur daun paling bawah sedikit berbeda.</li>
+        <li><strong>Strategi One-Hot Encoding Fitur Kategorikal:</strong> Pustaka Scikit-Learn memerlukan transformasi numerik formal melalui <code>OneHotEncoder</code> untuk memproses 17 fitur kategorikal menjadi matriks biner (0/1). Sebaliknya, algoritma internal Orange memperlakukan fitur nominal diskrit secara langsung tanpa penambahan dimensi biner. Variasi representasi ini menghasilkan titik potong ambang Gini yang sedikit berbeda pada cabang tingkat rendah.</li>
+        <li><strong>Pengacakan Partisi Indeks Lipatan (Fold Shuffling):</strong> Walaupun sama-sama menerapkan *10-Fold Stratified Cross Validation*, pemisahan indeks acak antara modul internal Orange dan fungsi <code>StratifiedKFold(random_state=42)</code> Scikit-Learn membagi subset baris data pada tiap lipatan dengan urutan yang berbeda. Variansi alami antar-lipatan (yang memiliki standar deviasi ±2,89%) secara wajar menghasilkan perbedaan skor rata-rata sekitar 1%–2%.</li>
+        <li><strong>Dampak Penyisihan 10 Data Baru:</strong> Pengurangan 10 baris data dari populasi data latih (dari 395 menjadi 385 sampel) sedikit memengaruhi frekuensi sampel pada simpul-simpul dengan jumlah data minimal (<code>min_samples_leaf=5</code>).</li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <!-- 4. LAMPIRAN BUKTI VISUALISASI MODEL -->
+    <div class="section-title">4. Lampiran Bukti Visualisasi Evaluasi dan Struktur Model</div>
+
+    <div class="figure-container">
+        <img src="/home/rima/Documents/AI/UTS/static/plots/confusion_matrix_dt.png" alt="Confusion Matrix Decision Tree" style="max-height: 230px;">
+        <div class="figure-caption">Gambar 1. Heatmap Confusion Matrix Decision Tree pada Data Pengujian (Testing 20%, 77 Siswa)</div>
+    </div>
+
+    <div class="figure-container">
+        <img src="/home/rima/Documents/AI/UTS/static/plots/feature_importance.png" alt="Feature Importance" style="max-height: 230px;">
+        <div class="figure-caption">Gambar 2. Feature Importance Decision Tree: Nilai G2 dan G1 Menjadi Prediktor Paling Berpengaruh</div>
+    </div>
+
+    <div class="figure-container">
+        <img src="/home/rima/Documents/AI/UTS/static/plots/model_comparison.png" alt="Model Comparison" style="max-height: 220px;">
+        <div class="figure-caption">Gambar 3. Grafik Perbandingan Akurasi Decision Tree (Scikit-Learn), MLP, dan Hasil Jurnal RIGGS</div>
+    </div>
+
+    <div class="figure-container">
+        <img src="/home/rima/Documents/AI/UTS/static/plots/decision_tree.png" alt="Visualisasi Pohon Keputusan" style="max-height: 260px;">
+        <div class="figure-caption">Gambar 4. Struktur Pohon Keputusan (Decision Tree) yang Dihasilkan Menggunakan plot_tree() Scikit-Learn</div>
+    </div>
+
+    <!-- 5. KESIMPULAN -->
+    <div class="section-title">5. Kesimpulan</div>
+    <p>
+        Berdasarkan seluruh hasil eksperimen, perbandingan, dan analisis statistik, dapat disimpulkan bahwa <strong>project aplikasi web berbasis Flask dan Scikit-Learn ini berhasil mereplikasi dan memvalidasi penelitian pada artikel jurnal ilmiah RIGGS secara akurat dan konsisten</strong>. Algoritma Decision Tree terbukti sangat unggul untuk klasifikasi prestasi akademik matematika karena tidak hanya menghasilkan akurasi yang tinggi (85,33% CV dan 83,12% Test), tetapi juga menyediakan interpretabilitas aturan keputusan yang transparan, bebas dari kebocoran data (*data leakage*), dan andal dalam mendeteksi siswa yang berisiko memperoleh prestasi rendah sedini mungkin.
+    </p>
+
+</body>
+</html>
