@@ -10,485 +10,347 @@
         <p class="text-muted mb-0">Klasifikasikan kategori capaian prestasi matematika siswa (Rendah / Sedang / Tinggi) berbasis 32 variabel profil dengan model Decision Tree CART.</p>
     </div>
 
-    <!-- Nav Tabs: Single vs Batch -->
-    <ul class="nav nav-pills mb-4 gap-2" id="prediksiTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link {% if active_tab != 'batch' %}active fw-semibold{% endif %} px-4 py-2 rounded-pill shadow-xs" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button" role="tab" aria-controls="single" aria-selected="true">
-                <i class="bi bi-person-fill me-1"></i> Klasifikasi Individual (Form 32 Fitur)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link {% if active_tab == 'batch' %}active fw-semibold{% endif %} px-4 py-2 rounded-pill shadow-xs" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="false">
-                <i class="bi bi-file-earmark-spreadsheet-fill me-1"></i> Klasifikasi Batch (Upload CSV)
-            </button>
-        </li>
-    </ul>
-
-    <div class="tab-content" id="prediksiTabContent">
-        <!-- TAB 1: SINGLE PREDICTION -->
-        <div class="tab-pane fade {% if active_tab != 'batch' %}show active{% endif %}" id="single" role="tabpanel" aria-labelledby="single-tab">
-
-            <!-- Hasil Prediksi Card (Jika Ada) -->
-            {% if prediction_result %}
-            <div class="card-modern p-4 mb-4 border-start border-4 {% if prediction_result.kategori == 'Tinggi' %}border-success{% elif prediction_result.kategori == 'Sedang' %}border-warning{% else %}border-danger{% endif %}">
-                <div class="row align-items-center g-4">
-                    <div class="col-md-7">
-                        <span class="badge bg-light text-dark border px-3 py-1 rounded-pill mb-2">Hasil Evaluasi Klasifikasi Decision Tree</span>
-                        <h3 class="fw-bold mb-2" style="color: var(--text-heading);">
-                            Kategori Prestasi: 
-                            {% if prediction_result.kategori == 'Tinggi' %}
-                                <span class="badge badge-tinggi fs-5 ms-1"><i class="bi bi-award-fill me-1"></i>Tinggi</span>
-                            {% elif prediction_result.kategori == 'Sedang' %}
-                                <span class="badge badge-sedang fs-5 ms-1"><i class="bi bi-check-circle-fill me-1"></i>Sedang</span>
-                            {% else %}
-                                <span class="badge badge-rendah fs-5 ms-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Rendah</span>
-                            {% endif %}
-                        </h3>
-                        <p class="text-muted small mb-0">
-                            {% if prediction_result.kategori == 'Tinggi' %}
-                                Siswa diproyeksikan memiliki pemahaman konsep matematika yang istimewa (G3 diperkirakan 15 - 20). Direkomendasikan untuk program pengayaan dan kompetisi olimpiade sains.
-                            {% elif prediction_result.kategori == 'Sedang' %}
-                                Siswa diproyeksikan mencapai standar ketuntasan belajar yang memadai (G3 diperkirakan 10 - 14). Perlu mempertahankan ritme belajar teratur dan konsisten.
-                            {% else %}
-                                <strong>Peringatan Dini:</strong> Siswa berisiko tinggi memperoleh nilai di bawah batas kelulusan (G3 diperkirakan 0 - 9). Sekolah disarankan segera memberikan pendampingan belajar khusus dan program remediasi.
-                            {% endif %}
-                        </p>
+    <!-- Hasil Prediksi Card (Jika Ada) -->
+    {% if prediction_result %}
+    <div class="card-modern p-4 mb-4 border-start border-4 {% if prediction_result.kategori == 'Tinggi' %}border-success{% elif prediction_result.kategori == 'Sedang' %}border-warning{% else %}border-danger{% endif %}">
+        <div class="row align-items-center g-4">
+            <div class="col-md-7">
+                <span class="badge bg-light text-dark border px-3 py-1 rounded-pill mb-2">Hasil Evaluasi Klasifikasi Decision Tree</span>
+                <h3 class="fw-bold mb-2" style="color: var(--text-heading);">
+                    Kategori Prestasi: 
+                    {% if prediction_result.kategori == 'Tinggi' %}
+                        <span class="badge badge-tinggi fs-5 ms-1"><i class="bi bi-award-fill me-1"></i>Tinggi</span>
+                    {% elif prediction_result.kategori == 'Sedang' %}
+                        <span class="badge badge-sedang fs-5 ms-1"><i class="bi bi-check-circle-fill me-1"></i>Sedang</span>
+                    {% else %}
+                        <span class="badge badge-rendah fs-5 ms-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Rendah</span>
+                    {% endif %}
+                </h3>
+                <p class="text-muted small mb-0">
+                    {% if prediction_result.kategori == 'Tinggi' %}
+                        Siswa diproyeksikan memiliki pemahaman konsep matematika yang istimewa (G3 diperkirakan 15 - 20). Direkomendasikan untuk program pengayaan dan kompetisi olimpiade sains.
+                    {% elif prediction_result.kategori == 'Sedang' %}
+                        Siswa diproyeksikan mencapai standar ketuntasan belajar yang memadai (G3 diperkirakan 10 - 14). Perlu mempertahankan ritme belajar teratur dan konsisten.
+                    {% else %}
+                        <strong>Peringatan Dini:</strong> Siswa berisiko tinggi memperoleh nilai di bawah batas kelulusan (G3 diperkirakan 0 - 9). Sekolah disarankan segera memberikan pendampingan belajar khusus dan program remediasi.
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-md-5">
+                <div class="p-3 bg-light rounded-3 border">
+                    <div class="fw-bold small text-muted mb-2 text-uppercase">Distribusi Probabilitas Model:</div>
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between small fw-semibold">
+                            <span class="text-danger">Rendah (0-9)</span>
+                            <span>{{ "%.1f"|format(prediction_result.probabilitas.Rendah * 100) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 7px; background-color: #e9ecef;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ prediction_result.probabilitas.Rendah * 100 }}%;"></div>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="p-3 bg-light rounded-3 border">
-                            <div class="fw-bold small text-muted mb-2 text-uppercase">Distribusi Probabilitas Model:</div>
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between small fw-semibold">
-                                    <span class="text-danger">Rendah (0-9)</span>
-                                    <span>{{ "%.1f"|format(prediction_result.probabilitas.Rendah * 100) }}%</span>
-                                </div>
-                                <div class="progress" style="height: 7px; background-color: #e9ecef;">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ prediction_result.probabilitas.Rendah * 100 }}%;"></div>
-                                </div>
-                            </div>
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between small fw-semibold">
-                                    <span class="text-warning text-dark">Sedang (10-14)</span>
-                                    <span>{{ "%.1f"|format(prediction_result.probabilitas.Sedang * 100) }}%</span>
-                                </div>
-                                <div class="progress" style="height: 7px; background-color: #e9ecef;">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ prediction_result.probabilitas.Sedang * 100 }}%;"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex justify-content-between small fw-semibold">
-                                    <span class="text-success">Tinggi (15-20)</span>
-                                    <span>{{ "%.1f"|format(prediction_result.probabilitas.Tinggi * 100) }}%</span>
-                                </div>
-                                <div class="progress" style="height: 7px; background-color: #e9ecef;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ prediction_result.probabilitas.Tinggi * 100 }}%;"></div>
-                                </div>
-                            </div>
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between small fw-semibold">
+                            <span class="text-warning text-dark">Sedang (10-14)</span>
+                            <span>{{ "%.1f"|format(prediction_result.probabilitas.Sedang * 100) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 7px; background-color: #e9ecef;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ prediction_result.probabilitas.Sedang * 100 }}%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between small fw-semibold">
+                            <span class="text-success">Tinggi (15-20)</span>
+                            <span>{{ "%.1f"|format(prediction_result.probabilitas.Tinggi * 100) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 7px; background-color: #e9ecef;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ prediction_result.probabilitas.Tinggi * 100 }}%;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
-
-            <!-- Banner Penegasan Pencegahan Data Leakage (G3 Dibuang) -->
-            <div class="card-modern p-3 mb-4 d-flex flex-row align-items-center gap-3 border-start border-4 border-warning bg-light">
-                <div class="fs-2 text-warning"><i class="bi bi-shield-lock-fill"></i></div>
-                <div>
-                    <h6 class="fw-bold mb-1 text-dark">🚫 Atribut G3 Dihapus dari Fitur Masukan (Bebas Data Leakage)</h6>
-                    <p class="small mb-0 text-muted">
-                        Sesuai kaidah jurnal RIGGS dan kriteria UTS, atribut <code>G3</code> dibuang dari fitur masukan karena <code>G3</code> digunakan sebagai dasar pembentukan label target (Kategori_G3). Form ini hanya menggunakan <strong>32 variabel prediktor</strong> (termasuk nilai awal G1 & G2).
-                    </p>
-                </div>
-            </div>
-
-            <!-- Preset Buttons -->
-            <div class="card-modern p-3 mb-4 bg-white d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <span class="small fw-semibold text-muted"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Isi Cepat Contoh Profil:</span>
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-outline-danger rounded-pill px-3 me-2" onclick="fillPreset('rendah')">Contoh Siswa Rendah</button>
-                    <button type="button" class="btn btn-outline-warning rounded-pill px-3 me-2 text-dark" onclick="fillPreset('sedang')">Contoh Siswa Sedang</button>
-                    <button type="button" class="btn btn-outline-success rounded-pill px-3" onclick="fillPreset('tinggi')">Contoh Siswa Tinggi</button>
-                </div>
-            </div>
-
-            <!-- Form 32 Fitur -->
-            <form action="{{ url_for('prediksi_view') }}" method="POST" id="prediksiForm">
-                <input type="hidden" name="action" value="single_predict">
-
-                <!-- 1. Akademik Kunci (Fitur Paling Berpengaruh) -->
-                <div class="card-modern p-4 mb-4">
-                    <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                        <i class="bi bi-mortarboard-fill me-2" style="color: var(--brand-primary);"></i>1. Penilaian Akademik Sebelumnya (Fitur Kunci)
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <label for="G2" class="form-label fw-bold" style="color: var(--brand-primary);">G2: Nilai Periode 2 (0 - 20) *</label>
-                            <input type="number" class="form-control form-control-lg border-2 border-primary" id="G2" name="G2" min="0" max="20" value="{{ form_values.get('G2', 11) }}" required>
-                            <div class="form-text small">Atribut pemisah utama pohon (&gt;85% bobot).</div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="G1" class="form-label fw-bold" style="color: var(--brand-primary);">G1: Nilai Periode 1 (0 - 20) *</label>
-                            <input type="number" class="form-control form-control-lg border-2 border-primary" id="G1" name="G1" min="0" max="20" value="{{ form_values.get('G1', 11) }}" required>
-                            <div class="form-text small">Atribut pemisah pendukung utama.</div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="failures" class="form-label">Kegagalan Kelas Lampau (0 - 3)</label>
-                            <input type="number" class="form-control" id="failures" name="failures" min="0" max="3" value="{{ form_values.get('failures', 0) }}" required>
-                            <div class="form-text small">Jumlah kegagalan kelas sebelumnya.</div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="studytime" class="form-label">Waktu Belajar Mingguan</label>
-                            <select class="form-select" id="studytime" name="studytime" required>
-                                <option value="1" {% if form_values.get('studytime') == '1' %}selected{% endif %}>1: &lt; 2 Jam</option>
-                                <option value="2" {% if form_values.get('studytime') == '2' or not form_values.get('studytime') %}selected{% endif %}>2: 2 &ndash; 5 Jam</option>
-                                <option value="3" {% if form_values.get('studytime') == '3' %}selected{% endif %}>3: 5 &ndash; 10 Jam</option>
-                                <option value="4" {% if form_values.get('studytime') == '4' %}selected{% endif %}>4: &gt; 10 Jam</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Karakteristik Demografis -->
-                <div class="card-modern p-4 mb-4">
-                    <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                        <i class="bi bi-person-badge me-2" style="color: var(--brand-primary);"></i>2. Karakteristik Demografis Siswa
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <label for="school" class="form-label">Sekolah</label>
-                            <select class="form-select" id="school" name="school" required>
-                                <option value="GP" {% if form_values.get('school') == 'GP' or not form_values.get('school') %}selected{% endif %}>GP (Gabriel Pereira)</option>
-                                <option value="MS" {% if form_values.get('school') == 'MS' %}selected{% endif %}>MS (Mousinho da Silveira)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="sex" class="form-label">Jenis Kelamin</label>
-                            <select class="form-select" id="sex" name="sex" required>
-                                <option value="F" {% if form_values.get('sex') == 'F' or not form_values.get('sex') %}selected{% endif %}>F (Perempuan)</option>
-                                <option value="M" {% if form_values.get('sex') == 'M' %}selected{% endif %}>M (Laki-laki)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="age" class="form-label">Usia Siswa (Tahun)</label>
-                            <input type="number" class="form-control" id="age" name="age" min="15" max="22" value="{{ form_values.get('age', 17) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="address" class="form-label">Alamat Tempat Tinggal</label>
-                            <select class="form-select" id="address" name="address" required>
-                                <option value="U" {% if form_values.get('address') == 'U' or not form_values.get('address') %}selected{% endif %}>U (Perkotaan / Urban)</option>
-                                <option value="R" {% if form_values.get('address') == 'R' %}selected{% endif %}>R (Pedesaan / Rural)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Latar Belakang Keluarga -->
-                <div class="card-modern p-4 mb-4">
-                    <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                        <i class="bi bi-people-fill me-2" style="color: var(--brand-primary);"></i>3. Latar Belakang Keluarga & Wali
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <label for="famsize" class="form-label">Ukuran Keluarga</label>
-                            <select class="form-select" id="famsize" name="famsize" required>
-                                <option value="GT3" {% if form_values.get('famsize') == 'GT3' or not form_values.get('famsize') %}selected{% endif %}>GT3 (&gt; 3 Orang)</option>
-                                <option value="LE3" {% if form_values.get('famsize') == 'LE3' %}selected{% endif %}>LE3 (&le; 3 Orang)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="Pstatus" class="form-label">Status Tinggal Orang Tua</label>
-                            <select class="form-select" id="Pstatus" name="Pstatus" required>
-                                <option value="T" {% if form_values.get('Pstatus') == 'T' or not form_values.get('Pstatus') %}selected{% endif %}>T (Bersama / Together)</option>
-                                <option value="A" {% if form_values.get('Pstatus') == 'A' %}selected{% endif %}>A (Terpisah / Apart)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="Medu" class="form-label">Pendidikan Ibu (0 - 4)</label>
-                            <select class="form-select" id="Medu" name="Medu" required>
-                                <option value="0" {% if form_values.get('Medu') == '0' %}selected{% endif %}>0: Tidak Ada</option>
-                                <option value="1" {% if form_values.get('Medu') == '1' %}selected{% endif %}>1: SD (Kelas 4)</option>
-                                <option value="2" {% if form_values.get('Medu') == '2' %}selected{% endif %}>2: SMP (Kelas 9)</option>
-                                <option value="3" {% if form_values.get('Medu') == '3' %}selected{% endif %}>3: SMA</option>
-                                <option value="4" {% if form_values.get('Medu') == '4' or not form_values.get('Medu') %}selected{% endif %}>4: Perguruan Tinggi</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="Fedu" class="form-label">Pendidikan Ayah (0 - 4)</label>
-                            <select class="form-select" id="Fedu" name="Fedu" required>
-                                <option value="0" {% if form_values.get('Fedu') == '0' %}selected{% endif %}>0: Tidak Ada</option>
-                                <option value="1" {% if form_values.get('Fedu') == '1' %}selected{% endif %}>1: SD (Kelas 4)</option>
-                                <option value="2" {% if form_values.get('Fedu') == '2' or not form_values.get('Fedu') %}selected{% endif %}>2: SMP (Kelas 9)</option>
-                                <option value="3" {% if form_values.get('Fedu') == '3' %}selected{% endif %}>3: SMA</option>
-                                <option value="4" {% if form_values.get('Fedu') == '4' %}selected{% endif %}>4: Perguruan Tinggi</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <label for="Mjob" class="form-label">Pekerjaan Ibu</label>
-                            <select class="form-select" id="Mjob" name="Mjob" required>
-                                <option value="other" {% if form_values.get('Mjob') == 'other' or not form_values.get('Mjob') %}selected{% endif %}>other (Lainnya)</option>
-                                <option value="services" {% if form_values.get('Mjob') == 'services' %}selected{% endif %}>services (Pegawai Layanan/PNS)</option>
-                                <option value="at_home" {% if form_values.get('Mjob') == 'at_home' %}selected{% endif %}>at_home (Ibu Rumah Tangga)</option>
-                                <option value="teacher" {% if form_values.get('Mjob') == 'teacher' %}selected{% endif %}>teacher (Guru / Dosen)</option>
-                                <option value="health" {% if form_values.get('Mjob') == 'health' %}selected{% endif %}>health (Kesehatan / Medis)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <label for="Fjob" class="form-label">Pekerjaan Ayah</label>
-                            <select class="form-select" id="Fjob" name="Fjob" required>
-                                <option value="other" {% if form_values.get('Fjob') == 'other' or not form_values.get('Fjob') %}selected{% endif %}>other (Lainnya)</option>
-                                <option value="services" {% if form_values.get('Fjob') == 'services' %}selected{% endif %}>services (Pegawai Layanan/PNS)</option>
-                                <option value="teacher" {% if form_values.get('Fjob') == 'teacher' %}selected{% endif %}>teacher (Guru / Dosen)</option>
-                                <option value="at_home" {% if form_values.get('Fjob') == 'at_home' %}selected{% endif %}>at_home (Di Rumah)</option>
-                                <option value="health" {% if form_values.get('Fjob') == 'health' %}selected{% endif %}>health (Kesehatan / Medis)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <label for="guardian" class="form-label">Wali Siswa</label>
-                            <select class="form-select" id="guardian" name="guardian" required>
-                                <option value="mother" {% if form_values.get('guardian') == 'mother' or not form_values.get('guardian') %}selected{% endif %}>mother (Ibu)</option>
-                                <option value="father" {% if form_values.get('guardian') == 'father' %}selected{% endif %}>father (Ayah)</option>
-                                <option value="other" {% if form_values.get('guardian') == 'other' %}selected{% endif %}>other (Lainnya)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Sekolah & Dukungan Pembelajaran -->
-                <div class="card-modern p-4 mb-4">
-                    <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                        <i class="bi bi-book-half me-2" style="color: var(--brand-primary);"></i>4. Sekolah & Dukungan Pembelajaran
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <label for="reason" class="form-label">Alasan Pilih Sekolah</label>
-                            <select class="form-select" id="reason" name="reason" required>
-                                <option value="course" {% if form_values.get('reason') == 'course' or not form_values.get('reason') %}selected{% endif %}>course (Kesesuaian Jurusan)</option>
-                                <option value="home" {% if form_values.get('reason') == 'home' %}selected{% endif %}>home (Dekat Rumah)</option>
-                                <option value="reputation" {% if form_values.get('reason') == 'reputation' %}selected{% endif %}>reputation (Reputasi Sekolah)</option>
-                                <option value="other" {% if form_values.get('reason') == 'other' %}selected{% endif %}>other (Lainnya)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="traveltime" class="form-label">Waktu Tempuh Perjalanan</label>
-                            <select class="form-select" id="traveltime" name="traveltime" required>
-                                <option value="1" {% if form_values.get('traveltime') == '1' or not form_values.get('traveltime') %}selected{% endif %}>1: &lt; 15 Menit</option>
-                                <option value="2" {% if form_values.get('traveltime') == '2' %}selected{% endif %}>2: 15 &ndash; 30 Menit</option>
-                                <option value="3" {% if form_values.get('traveltime') == '3' %}selected{% endif %}>3: 30 &ndash; 60 Menit</option>
-                                <option value="4" {% if form_values.get('traveltime') == '4' %}selected{% endif %}>4: &gt; 60 Menit</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="schoolsup" class="form-label">Bimbingan Khusus Sekolah</label>
-                            <select class="form-select" id="schoolsup" name="schoolsup" required>
-                                <option value="no" {% if form_values.get('schoolsup') == 'no' or not form_values.get('schoolsup') %}selected{% endif %}>no (Tidak Ada)</option>
-                                <option value="yes" {% if form_values.get('schoolsup') == 'yes' %}selected{% endif %}>yes (Ada)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="famsup" class="form-label">Dukungan Belajar Keluarga</label>
-                            <select class="form-select" id="famsup" name="famsup" required>
-                                <option value="yes" {% if form_values.get('famsup') == 'yes' or not form_values.get('famsup') %}selected{% endif %}>yes (Ada)</option>
-                                <option value="no" {% if form_values.get('famsup') == 'no' %}selected{% endif %}>no (Tidak Ada)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="paid" class="form-label">Les Tambahan Berbayar</label>
-                            <select class="form-select" id="paid" name="paid" required>
-                                <option value="no" {% if form_values.get('paid') == 'no' or not form_values.get('paid') %}selected{% endif %}>no (Tidak)</option>
-                                <option value="yes" {% if form_values.get('paid') == 'yes' %}selected{% endif %}>yes (Ya)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="activities" class="form-label">Kegiatan Ekstrakurikuler</label>
-                            <select class="form-select" id="activities" name="activities" required>
-                                <option value="yes" {% if form_values.get('activities') == 'yes' or not form_values.get('activities') %}selected{% endif %}>yes (Ya)</option>
-                                <option value="no" {% if form_values.get('activities') == 'no' %}selected{% endif %}>no (Tidak)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="nursery" class="form-label">Pernah Sekolah PAUD/TK</label>
-                            <select class="form-select" id="nursery" name="nursery" required>
-                                <option value="yes" {% if form_values.get('nursery') == 'yes' or not form_values.get('nursery') %}selected{% endif %}>yes (Ya)</option>
-                                <option value="no" {% if form_values.get('nursery') == 'no' %}selected{% endif %}>no (Tidak)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="higher" class="form-label">Berminat Kuliah Tinggi</label>
-                            <select class="form-select" id="higher" name="higher" required>
-                                <option value="yes" {% if form_values.get('higher') == 'yes' or not form_values.get('higher') %}selected{% endif %}>yes (Ya)</option>
-                                <option value="no" {% if form_values.get('higher') == 'no' %}selected{% endif %}>no (Tidak)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Sosial & Gaya Hidup -->
-                <div class="card-modern p-4 mb-4">
-                    <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                        <i class="bi bi-heart-pulse-fill me-2" style="color: var(--brand-primary);"></i>5. Sosial, Gaya Hidup, dan Kehadiran
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-sm-6">
-                            <label for="internet" class="form-label">Akses Internet di Rumah</label>
-                            <select class="form-select" id="internet" name="internet" required>
-                                <option value="yes" {% if form_values.get('internet') == 'yes' or not form_values.get('internet') %}selected{% endif %}>yes (Ada)</option>
-                                <option value="no" {% if form_values.get('internet') == 'no' %}selected{% endif %}>no (Tidak Ada)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="romantic" class="form-label">Hubungan Asmara (Pacaran)</label>
-                            <select class="form-select" id="romantic" name="romantic" required>
-                                <option value="no" {% if form_values.get('romantic') == 'no' or not form_values.get('romantic') %}selected{% endif %}>no (Tidak Ada)</option>
-                                <option value="yes" {% if form_values.get('romantic') == 'yes' %}selected{% endif %}>yes (Ada)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="famrel" class="form-label">Harmonisasi Keluarga (1 - 5)</label>
-                            <input type="number" class="form-control" id="famrel" name="famrel" min="1" max="5" value="{{ form_values.get('famrel', 4) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="freetime" class="form-label">Waktu Luang (1 - 5)</label>
-                            <input type="number" class="form-control" id="freetime" name="freetime" min="1" max="5" value="{{ form_values.get('freetime', 3) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="goout" class="form-label">Keluar Bersama Teman (1 - 5)</label>
-                            <input type="number" class="form-control" id="goout" name="goout" min="1" max="5" value="{{ form_values.get('goout', 3) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="Dalc" class="form-label">Alkohol Hari Kerja (1 - 5)</label>
-                            <input type="number" class="form-control" id="Dalc" name="Dalc" min="1" max="5" value="{{ form_values.get('Dalc', 1) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="Walc" class="form-label">Alkohol Akhir Pekan (1 - 5)</label>
-                            <input type="number" class="form-control" id="Walc" name="Walc" min="1" max="5" value="{{ form_values.get('Walc', 1) }}" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <label for="health" class="form-label">Kondisi Kesehatan (1 - 5)</label>
-                            <input type="number" class="form-control" id="health" name="health" min="1" max="5" value="{{ form_values.get('health', 4) }}" required>
-                        </div>
-                        <div class="col-md-4 col-sm-6">
-                            <label for="absences" class="form-label fw-bold">Jumlah Ketidakhadiran (Absensi)</label>
-                            <input type="number" class="form-control" id="absences" name="absences" min="0" max="75" value="{{ form_values.get('absences', 4) }}" required>
-                            <div class="form-text small">Total hari tidak masuk sekolah (0 &ndash; 75).</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-end mb-5">
-                    <button type="submit" class="btn btn-primary px-5 py-3 fw-semibold shadow-sm rounded-pill">
-                        <i class="bi bi-diagram-3 me-2"></i> Klasifikasikan Prestasi Siswa Sekarang
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- TAB 2: BATCH PREDICTION CSV -->
-        <div class="tab-pane fade {% if active_tab == 'batch' %}show active{% endif %}" id="batch" role="tabpanel" aria-labelledby="batch-tab">
-            <div class="row g-4 mb-4">
-                <div class="col-lg-6">
-                    <div class="card-modern p-4 h-100">
-                        <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                            <i class="bi bi-cloud-arrow-up-fill me-2" style="color: var(--brand-primary);"></i>Upload Berkas CSV untuk Klasifikasi Massal
-                        </h5>
-                        <form action="{{ url_for('prediksi_view') }}" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="action" value="batch_predict">
-                            <div class="mb-3">
-                                <label for="csv_file" class="form-label fw-semibold">Pilih Berkas CSV Siswa</label>
-                                <input class="form-control" type="file" id="csv_file" name="csv_file" accept=".csv" required>
-                                <div class="form-text small">
-                                    Mendukung pemisah titik koma (<code>;</code>) maupun koma (<code>,</code>). Kolom <code>G3</code> otomatis diabaikan untuk menjamin bebas leakage.
-                                </div>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2">
-                                <button type="submit" class="btn btn-primary fw-semibold rounded-pill px-4">
-                                    <i class="bi bi-play-circle me-1"></i> Proses Klasifikasi Batch
-                                </button>
-                                <a href="{{ url_for('download_template_csv') }}" class="btn btn-outline-secondary rounded-pill px-3">
-                                    <i class="bi bi-file-earmark-arrow-down me-1"></i> Template Contoh CSV
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card-modern p-4 h-100 bg-light">
-                        <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
-                            <i class="bi bi-info-circle-fill me-2" style="color: var(--brand-primary);"></i>Petunjuk Format CSV Batch
-                        </h5>
-                        <div class="small text-muted">
-                            <p class="mb-2">Pastikan berkas CSV memiliki baris header dengan 32 nama kolom fitur:</p>
-                            <code class="d-block p-2 bg-white rounded-3 border mb-3 small text-dark" style="word-break: break-all;">
-                                school;sex;age;address;famsize;Pstatus;Medu;Fedu;Mjob;Fjob;reason;guardian;traveltime;studytime;failures;schoolsup;famsup;paid;activities;nursery;higher;internet;romantic;famrel;freetime;goout;Dalc;Walc;health;absences;G1;G2
-                            </code>
-                            <p class="mb-0">
-                                Sistem akan menambahkan kolom <code>Prediksi_Kategori</code>, <code>Probabilitas_Maksimal</code>, dan probabilitas per kelas secara otomatis.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabel Hasil Batch Prediction (Jika Ada) -->
-            {% if batch_results %}
-            <div class="card-modern p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h5 class="fw-bold mb-0" style="color: var(--text-heading);">
-                        <i class="bi bi-table me-2" style="color: var(--brand-primary);"></i>Hasil Klasifikasi Batch ({{ batch_results|length }} Data Siswa)
-                    </h5>
-                    <a href="{{ url_for('download_batch_result') }}" class="btn btn-success btn-sm fw-semibold rounded-pill px-3">
-                        <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Hasil Klasifikasi (CSV)
-                    </a>
-                </div>
-                <div class="table-responsive" style="max-height: 480px;">
-                    <table class="table table-clean table-sm align-middle small text-nowrap mb-0">
-                        <thead class="sticky-top bg-white">
-                            <tr>
-                                <th>#</th>
-                                <th>Prediksi Kategori</th>
-                                <th>Prob. Rendah</th>
-                                <th>Prob. Sedang</th>
-                                <th>Prob. Tinggi</th>
-                                <th>G1</th>
-                                <th>G2</th>
-                                <th>Failures</th>
-                                <th>Absences</th>
-                                <th>Studytime</th>
-                                <th>Sex</th>
-                                <th>Age</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for row in batch_results %}
-                            <tr>
-                                <td class="fw-bold text-muted">{{ loop.index }}</td>
-                                <td>
-                                    {% if row.Prediksi_Kategori == 'Rendah' %}
-                                        <span class="badge badge-rendah">Rendah</span>
-                                    {% elif row.Prediksi_Kategori == 'Sedang' %}
-                                        <span class="badge badge-sedang">Sedang</span>
-                                    {% else %}
-                                        <span class="badge badge-tinggi">Tinggi</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ "%.2f"|format(row.Prob_Rendah * 100) }}%</td>
-                                <td>{{ "%.2f"|format(row.Prob_Sedang * 100) }}%</td>
-                                <td>{{ "%.2f"|format(row.Prob_Tinggi * 100) }}%</td>
-                                <td>{{ row.G1 }}</td>
-                                <td class="fw-bold" style="color: var(--brand-primary);">{{ row.G2 }}</td>
-                                <td>{{ row.failures }}</td>
-                                <td>{{ row.absences }}</td>
-                                <td>{{ row.studytime }}</td>
-                                <td>{{ row.sex }}</td>
-                                <td>{{ row.age }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% endif %}
         </div>
     </div>
+    {% endif %}
+
+    <!-- Preset Buttons -->
+    <div class="card-modern p-3 mb-4 bg-white d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <span class="small fw-semibold text-muted"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Isi Cepat Contoh Profil:</span>
+        <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-outline-danger rounded-pill px-3 me-2" onclick="fillPreset('rendah')">Contoh Siswa Rendah</button>
+            <button type="button" class="btn btn-outline-warning rounded-pill px-3 me-2 text-dark" onclick="fillPreset('sedang')">Contoh Siswa Sedang</button>
+            <button type="button" class="btn btn-outline-success rounded-pill px-3" onclick="fillPreset('tinggi')">Contoh Siswa Tinggi</button>
+        </div>
+    </div>
+
+    <!-- Form 32 Fitur -->
+    <form action="{{ url_for('prediksi_view') }}" method="POST" id="prediksiForm">
+        <input type="hidden" name="action" value="single_predict">
+
+        <!-- 1. Akademik Kunci (Fitur Paling Berpengaruh) -->
+        <div class="card-modern p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
+                <i class="bi bi-mortarboard-fill me-2" style="color: var(--brand-primary);"></i>1. Penilaian Akademik Sebelumnya (Fitur Kunci)
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <label for="G2" class="form-label fw-bold" style="color: var(--brand-primary);">G2: Nilai Periode 2 (0 - 20) *</label>
+                    <input type="number" class="form-control form-control-lg border-2 border-primary" id="G2" name="G2" min="0" max="20" value="{{ form_values.get('G2', 11) }}" required>
+                    <div class="form-text small">Atribut pemisah utama pohon (&gt;85% bobot).</div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="G1" class="form-label fw-bold" style="color: var(--brand-primary);">G1: Nilai Periode 1 (0 - 20) *</label>
+                    <input type="number" class="form-control form-control-lg border-2 border-primary" id="G1" name="G1" min="0" max="20" value="{{ form_values.get('G1', 11) }}" required>
+                    <div class="form-text small">Atribut pemisah pendukung utama.</div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="failures" class="form-label">Kegagalan Kelas Lampau (0 - 3)</label>
+                    <input type="number" class="form-control" id="failures" name="failures" min="0" max="3" value="{{ form_values.get('failures', 0) }}" required>
+                    <div class="form-text small">Jumlah kegagalan kelas sebelumnya.</div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="studytime" class="form-label">Waktu Belajar Mingguan</label>
+                    <select class="form-select" id="studytime" name="studytime" required>
+                        <option value="1" {% if form_values.get('studytime') == '1' %}selected{% endif %}>1: &lt; 2 Jam</option>
+                        <option value="2" {% if form_values.get('studytime') == '2' or not form_values.get('studytime') %}selected{% endif %}>2: 2 &ndash; 5 Jam</option>
+                        <option value="3" {% if form_values.get('studytime') == '3' %}selected{% endif %}>3: 5 &ndash; 10 Jam</option>
+                        <option value="4" {% if form_values.get('studytime') == '4' %}selected{% endif %}>4: &gt; 10 Jam</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Karakteristik Demografis -->
+        <div class="card-modern p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
+                <i class="bi bi-person-badge me-2" style="color: var(--brand-primary);"></i>2. Karakteristik Demografis Siswa
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <label for="school" class="form-label">Sekolah</label>
+                    <select class="form-select" id="school" name="school" required>
+                        <option value="GP" {% if form_values.get('school') == 'GP' or not form_values.get('school') %}selected{% endif %}>GP (Gabriel Pereira)</option>
+                        <option value="MS" {% if form_values.get('school') == 'MS' %}selected{% endif %}>MS (Mousinho da Silveira)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="sex" class="form-label">Jenis Kelamin</label>
+                    <select class="form-select" id="sex" name="sex" required>
+                        <option value="F" {% if form_values.get('sex') == 'F' or not form_values.get('sex') %}selected{% endif %}>F (Perempuan)</option>
+                        <option value="M" {% if form_values.get('sex') == 'M' %}selected{% endif %}>M (Laki-laki)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="age" class="form-label">Usia Siswa (Tahun)</label>
+                    <input type="number" class="form-control" id="age" name="age" min="15" max="22" value="{{ form_values.get('age', 17) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="address" class="form-label">Alamat Tempat Tinggal</label>
+                    <select class="form-select" id="address" name="address" required>
+                        <option value="U" {% if form_values.get('address') == 'U' or not form_values.get('address') %}selected{% endif %}>U (Perkotaan / Urban)</option>
+                        <option value="R" {% if form_values.get('address') == 'R' %}selected{% endif %}>R (Pedesaan / Rural)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Latar Belakang Keluarga -->
+        <div class="card-modern p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
+                <i class="bi bi-people-fill me-2" style="color: var(--brand-primary);"></i>3. Latar Belakang Keluarga & Wali
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <label for="famsize" class="form-label">Ukuran Keluarga</label>
+                    <select class="form-select" id="famsize" name="famsize" required>
+                        <option value="GT3" {% if form_values.get('famsize') == 'GT3' or not form_values.get('famsize') %}selected{% endif %}>GT3 (&gt; 3 Orang)</option>
+                        <option value="LE3" {% if form_values.get('famsize') == 'LE3' %}selected{% endif %}>LE3 (&le; 3 Orang)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="Pstatus" class="form-label">Status Tinggal Orang Tua</label>
+                    <select class="form-select" id="Pstatus" name="Pstatus" required>
+                        <option value="T" {% if form_values.get('Pstatus') == 'T' or not form_values.get('Pstatus') %}selected{% endif %}>T (Bersama / Together)</option>
+                        <option value="A" {% if form_values.get('Pstatus') == 'A' %}selected{% endif %}>A (Terpisah / Apart)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="Medu" class="form-label">Pendidikan Ibu (0 - 4)</label>
+                    <select class="form-select" id="Medu" name="Medu" required>
+                        <option value="0" {% if form_values.get('Medu') == '0' %}selected{% endif %}>0: Tidak Ada</option>
+                        <option value="1" {% if form_values.get('Medu') == '1' %}selected{% endif %}>1: SD (Kelas 4)</option>
+                        <option value="2" {% if form_values.get('Medu') == '2' %}selected{% endif %}>2: SMP (Kelas 9)</option>
+                        <option value="3" {% if form_values.get('Medu') == '3' %}selected{% endif %}>3: SMA</option>
+                        <option value="4" {% if form_values.get('Medu') == '4' or not form_values.get('Medu') %}selected{% endif %}>4: Perguruan Tinggi</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="Fedu" class="form-label">Pendidikan Ayah (0 - 4)</label>
+                    <select class="form-select" id="Fedu" name="Fedu" required>
+                        <option value="0" {% if form_values.get('Fedu') == '0' %}selected{% endif %}>0: Tidak Ada</option>
+                        <option value="1" {% if form_values.get('Fedu') == '1' %}selected{% endif %}>1: SD (Kelas 4)</option>
+                        <option value="2" {% if form_values.get('Fedu') == '2' or not form_values.get('Fedu') %}selected{% endif %}>2: SMP (Kelas 9)</option>
+                        <option value="3" {% if form_values.get('Fedu') == '3' %}selected{% endif %}>3: SMA</option>
+                        <option value="4" {% if form_values.get('Fedu') == '4' %}selected{% endif %}>4: Perguruan Tinggi</option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <label for="Mjob" class="form-label">Pekerjaan Ibu</label>
+                    <select class="form-select" id="Mjob" name="Mjob" required>
+                        <option value="other" {% if form_values.get('Mjob') == 'other' or not form_values.get('Mjob') %}selected{% endif %}>other (Lainnya)</option>
+                        <option value="services" {% if form_values.get('Mjob') == 'services' %}selected{% endif %}>services (Pegawai Layanan/PNS)</option>
+                        <option value="at_home" {% if form_values.get('Mjob') == 'at_home' %}selected{% endif %}>at_home (Ibu Rumah Tangga)</option>
+                        <option value="teacher" {% if form_values.get('Mjob') == 'teacher' %}selected{% endif %}>teacher (Guru / Dosen)</option>
+                        <option value="health" {% if form_values.get('health') == 'health' or form_values.get('Mjob') == 'health' %}selected{% endif %}>health (Kesehatan / Medis)</option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <label for="Fjob" class="form-label">Pekerjaan Ayah</label>
+                    <select class="form-select" id="Fjob" name="Fjob" required>
+                        <option value="other" {% if form_values.get('Fjob') == 'other' or not form_values.get('Fjob') %}selected{% endif %}>other (Lainnya)</option>
+                        <option value="services" {% if form_values.get('Fjob') == 'services' %}selected{% endif %}>services (Pegawai Layanan/PNS)</option>
+                        <option value="teacher" {% if form_values.get('Fjob') == 'teacher' %}selected{% endif %}>teacher (Guru / Dosen)</option>
+                        <option value="at_home" {% if form_values.get('Fjob') == 'at_home' %}selected{% endif %}>at_home (Di Rumah)</option>
+                        <option value="health" {% if form_values.get('Fjob') == 'health' %}selected{% endif %}>health (Kesehatan / Medis)</option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <label for="guardian" class="form-label">Wali Siswa</label>
+                    <select class="form-select" id="guardian" name="guardian" required>
+                        <option value="mother" {% if form_values.get('guardian') == 'mother' or not form_values.get('guardian') %}selected{% endif %}>mother (Ibu)</option>
+                        <option value="father" {% if form_values.get('guardian') == 'father' %}selected{% endif %}>father (Ayah)</option>
+                        <option value="other" {% if form_values.get('guardian') == 'other' %}selected{% endif %}>other (Lainnya)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Sekolah & Dukungan Pembelajaran -->
+        <div class="card-modern p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
+                <i class="bi bi-book-half me-2" style="color: var(--brand-primary);"></i>4. Sekolah & Dukungan Pembelajaran
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <label for="reason" class="form-label">Alasan Pilih Sekolah</label>
+                    <select class="form-select" id="reason" name="reason" required>
+                        <option value="course" {% if form_values.get('reason') == 'course' or not form_values.get('reason') %}selected{% endif %}>course (Kesesuaian Jurusan)</option>
+                        <option value="home" {% if form_values.get('reason') == 'home' %}selected{% endif %}>home (Dekat Rumah)</option>
+                        <option value="reputation" {% if form_values.get('reason') == 'reputation' %}selected{% endif %}>reputation (Reputasi Sekolah)</option>
+                        <option value="other" {% if form_values.get('reason') == 'other' %}selected{% endif %}>other (Lainnya)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="traveltime" class="form-label">Waktu Tempuh Perjalanan</label>
+                    <select class="form-select" id="traveltime" name="traveltime" required>
+                        <option value="1" {% if form_values.get('traveltime') == '1' or not form_values.get('traveltime') %}selected{% endif %}>1: &lt; 15 Menit</option>
+                        <option value="2" {% if form_values.get('traveltime') == '2' %}selected{% endif %}>2: 15 &ndash; 30 Menit</option>
+                        <option value="3" {% if form_values.get('traveltime') == '3' %}selected{% endif %}>3: 30 &ndash; 60 Menit</option>
+                        <option value="4" {% if form_values.get('traveltime') == '4' %}selected{% endif %}>4: &gt; 60 Menit</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="schoolsup" class="form-label">Bimbingan Khusus Sekolah</label>
+                    <select class="form-select" id="schoolsup" name="schoolsup" required>
+                        <option value="no" {% if form_values.get('schoolsup') == 'no' or not form_values.get('schoolsup') %}selected{% endif %}>no (Tidak Ada)</option>
+                        <option value="yes" {% if form_values.get('schoolsup') == 'yes' %}selected{% endif %}>yes (Ada)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="famsup" class="form-label">Dukungan Belajar Keluarga</label>
+                    <select class="form-select" id="famsup" name="famsup" required>
+                        <option value="yes" {% if form_values.get('famsup') == 'yes' or not form_values.get('famsup') %}selected{% endif %}>yes (Ada)</option>
+                        <option value="no" {% if form_values.get('famsup') == 'no' %}selected{% endif %}>no (Tidak Ada)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="paid" class="form-label">Les Tambahan Berbayar</label>
+                    <select class="form-select" id="paid" name="paid" required>
+                        <option value="no" {% if form_values.get('paid') == 'no' or not form_values.get('paid') %}selected{% endif %}>no (Tidak)</option>
+                        <option value="yes" {% if form_values.get('paid') == 'yes' %}selected{% endif %}>yes (Ya)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="activities" class="form-label">Kegiatan Ekstrakurikuler</label>
+                    <select class="form-select" id="activities" name="activities" required>
+                        <option value="yes" {% if form_values.get('activities') == 'yes' or not form_values.get('activities') %}selected{% endif %}>yes (Ya)</option>
+                        <option value="no" {% if form_values.get('activities') == 'no' %}selected{% endif %}>no (Tidak)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="nursery" class="form-label">Pernah Sekolah PAUD/TK</label>
+                    <select class="form-select" id="nursery" name="nursery" required>
+                        <option value="yes" {% if form_values.get('nursery') == 'yes' or not form_values.get('nursery') %}selected{% endif %}>yes (Ya)</option>
+                        <option value="no" {% if form_values.get('nursery') == 'no' %}selected{% endif %}>no (Tidak)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="higher" class="form-label">Berminat Kuliah Tinggi</label>
+                    <select class="form-select" id="higher" name="higher" required>
+                        <option value="yes" {% if form_values.get('higher') == 'yes' or not form_values.get('higher') %}selected{% endif %}>yes (Ya)</option>
+                        <option value="no" {% if form_values.get('higher') == 'no' %}selected{% endif %}>no (Tidak)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Sosial & Gaya Hidup -->
+        <div class="card-modern p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: var(--text-heading);">
+                <i class="bi bi-heart-pulse-fill me-2" style="color: var(--brand-primary);"></i>5. Sosial, Gaya Hidup, dan Kehadiran
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <label for="internet" class="form-label">Akses Internet di Rumah</label>
+                    <select class="form-select" id="internet" name="internet" required>
+                        <option value="yes" {% if form_values.get('internet') == 'yes' or not form_values.get('internet') %}selected{% endif %}>yes (Ada)</option>
+                        <option value="no" {% if form_values.get('internet') == 'no' %}selected{% endif %}>no (Tidak Ada)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="romantic" class="form-label">Hubungan Asmara (Pacaran)</label>
+                    <select class="form-select" id="romantic" name="romantic" required>
+                        <option value="no" {% if form_values.get('romantic') == 'no' or not form_values.get('romantic') %}selected{% endif %}>no (Tidak Ada)</option>
+                        <option value="yes" {% if form_values.get('romantic') == 'yes' %}selected{% endif %}>yes (Ada)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="famrel" class="form-label">Harmonisasi Keluarga (1 - 5)</label>
+                    <input type="number" class="form-control" id="famrel" name="famrel" min="1" max="5" value="{{ form_values.get('famrel', 4) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="freetime" class="form-label">Waktu Luang (1 - 5)</label>
+                    <input type="number" class="form-control" id="freetime" name="freetime" min="1" max="5" value="{{ form_values.get('freetime', 3) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="goout" class="form-label">Keluar Bersama Teman (1 - 5)</label>
+                    <input type="number" class="form-control" id="goout" name="goout" min="1" max="5" value="{{ form_values.get('goout', 3) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="Dalc" class="form-label">Alkohol Hari Kerja (1 - 5)</label>
+                    <input type="number" class="form-control" id="Dalc" name="Dalc" min="1" max="5" value="{{ form_values.get('Dalc', 1) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="Walc" class="form-label">Alkohol Akhir Pekan (1 - 5)</label>
+                    <input type="number" class="form-control" id="Walc" name="Walc" min="1" max="5" value="{{ form_values.get('Walc', 1) }}" required>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label for="health" class="form-label">Kondisi Kesehatan (1 - 5)</label>
+                    <input type="number" class="form-control" id="health" name="health" min="1" max="5" value="{{ form_values.get('health', 4) }}" required>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <label for="absences" class="form-label fw-bold">Jumlah Ketidakhadiran (Absensi)</label>
+                    <input type="number" class="form-control" id="absences" name="absences" min="0" max="75" value="{{ form_values.get('absences', 4) }}" required>
+                    <div class="form-text small">Total hari tidak masuk sekolah (0 &ndash; 75).</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end mb-5">
+            <button type="submit" class="btn btn-primary px-5 py-3 fw-semibold shadow-sm rounded-pill">
+                <i class="bi bi-diagram-3 me-2"></i> Klasifikasikan Prestasi Siswa Sekarang
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}
 
