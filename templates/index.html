@@ -4,171 +4,157 @@
 
 {% block content %}
 <div class="container">
-    <!-- Hero Banner -->
-    <div class="hero-section mb-4">
+
+    <!-- 1. HERO SECTION (Minimalist Ocean Blue Inspired by Talitha) -->
+    <div class="hero-minimal mb-4">
         <div class="row align-items-center">
             <div class="col-lg-8">
-                <span class="badge bg-warning text-dark mb-2 px-3 py-2 fw-bold">
-                    <i class="bi bi-journal-text me-1"></i> Implementasi Publikasi Ilmiah RIGGS (2026)
-                </span>
-                <h1 class="display-6 fw-bold mb-3">
-                    Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree
+                <div class="hero-badge">
+                    <i class="bi bi-journal-bookmark-fill"></i> Implementasi Jurnal Ilmiah RIGGS (2026)
+                </div>
+                <h1 class="hero-title">
+                    Klasifikasi Prestasi Akademik Matematika Siswa
                 </h1>
-                <p class="lead text-light mb-3" style="opacity: 0.95;">
-                    Pengembangan sistem cerdas berbasis web untuk mengklasifikasikan capaian akademik siswa ke dalam kategori 
-                    <strong>Rendah</strong> (0-9), <strong>Sedang</strong> (10-14), dan <strong>Tinggi</strong> (15-20) 
-                    berdasarkan dataset Student Performance (UCI Machine Learning Repository).
+                <p class="hero-subtitle mb-4">
+                    Sistem klasifikasi multikelas berbasis <strong>Decision Tree (Scikit-Learn)</strong> untuk memetakan capaian belajar siswa ke dalam kategori <strong>Rendah (0–9)</strong>, <strong>Sedang (10–14)</strong>, dan <strong>Tinggi (15–20)</strong> menggunakan dataset Student Performance.
                 </p>
-                <div class="d-flex flex-wrap gap-2 pt-2">
-                    <a href="{{ url_for('prediksi_view') }}" class="btn btn-warning fw-bold px-4 py-2 shadow-sm">
-                        <i class="bi bi-diagram-3 me-1"></i> Coba Klasifikasi Sekarang
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('prediksi_view') }}" class="btn btn-light fw-bold px-4 py-2 rounded-pill shadow-sm" style="color: #145477;">
+                        <i class="bi bi-diagram-3 me-1"></i> Mulai Klasifikasi Siswa
                     </a>
-                    <a href="{{ url_for('uji_baru_view') }}" class="btn btn-outline-light px-4 py-2">
-                        <i class="bi bi-check2-circle me-1"></i> Uji 10 Data Baru
-                    </a>
-                    <a href="{{ url_for('evaluasi_view') }}" class="btn btn-outline-light px-4 py-2">
+                    <a href="{{ url_for('evaluasi_view') }}" class="btn btn-outline-light px-4 py-2 rounded-pill">
                         <i class="bi bi-graph-up me-1"></i> Lihat Evaluasi Model
                     </a>
                 </div>
             </div>
-            <div class="col-lg-4 d-none d-lg-block text-center">
-                <div class="bg-white bg-opacity-10 p-4 rounded-4 border border-white border-opacity-25 shadow-sm">
-                    <i class="bi bi-mortarboard-fill display-1 text-warning mb-2"></i>
-                    <h5 class="fw-bold mb-1">Student Performance</h5>
-                    <p class="small text-light mb-0">Bagian Matematika (395 Siswa, 32 Fitur Prediktor)</p>
+            <div class="col-lg-4 d-none d-lg-block text-end pe-lg-4">
+                <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-25 d-inline-block text-center shadow-sm" style="width: 220px;">
+                    <i class="bi bi-mortarboard display-3 text-white mb-2"></i>
+                    <div class="fw-bold text-white small">395 Siswa · 32 Fitur</div>
+                    <div class="text-white-50 small">UCI Machine Learning</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Stats -->
+    <!-- 2. HIGHLIGHT METRIK (Dashboard Cards Simpel & To-The-Point) -->
     <div class="row g-3 mb-4">
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 shadow-sm stat-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="text-muted small fw-semibold">AKURASI JURNAL (ORANGE)</div>
-                            <div class="fs-3 fw-bold text-primary">{{ "%.1f"|format(metrics.jurnal_reference.accuracy * 100) }}%</div>
-                            <div class="small text-muted">10-Fold CV (344/395 benar)</div>
-                        </div>
-                        <div class="bg-primary-subtle text-primary p-3 rounded-circle">
-                            <i class="bi bi-award fs-4"></i>
-                        </div>
-                    </div>
+            <div class="stat-card-modern primary-focus">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <div class="stat-label">Akurasi Jurnal (Orange)</div>
+                    <span class="badge badge-primary-soft">Jurnal RIGGS</span>
+                </div>
+                <div class="stat-value text-primary" style="color: #145477 !important;">
+                    {{ "%.1f"|format(metrics.jurnal_reference.accuracy * 100) }}%
+                </div>
+                <div class="stat-desc">
+                    10-Fold CV (344/395 kasus benar)
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 shadow-sm stat-card success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="text-muted small fw-semibold">AKURASI TEST (SKLEARN)</div>
-                            <div class="fs-3 fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}%</div>
-                            <div class="small text-muted">Evaluasi Data Uji 20% (77 siswa)</div>
-                        </div>
-                        <div class="bg-success-subtle text-success p-3 rounded-circle">
-                            <i class="bi bi-check-circle fs-4"></i>
-                        </div>
-                    </div>
+            <div class="stat-card-modern success-focus">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <div class="stat-label">Akurasi Project (Sklearn)</div>
+                    <span class="badge badge-tinggi">Model Kami</span>
+                </div>
+                <div class="stat-value text-success">
+                    {{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}%
+                </div>
+                <div class="stat-desc">
+                    10-Fold CV (±2.89%) &middot; Test: {{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}%
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 shadow-sm stat-card warning">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="text-muted small fw-semibold">10-FOLD CV KAMI</div>
-                            <div class="fs-3 fw-bold text-warning">{{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}%</div>
-                            <div class="small text-muted">Stratified K-Fold Scikit-Learn</div>
-                        </div>
-                        <div class="bg-warning-subtle text-warning p-3 rounded-circle">
-                            <i class="bi bi-shuffle fs-4"></i>
-                        </div>
-                    </div>
+            <div class="stat-card-modern warning-focus">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <div class="stat-label">Presisi &amp; Recall Makro</div>
+                    <span class="badge badge-sedang">Seimbang</span>
+                </div>
+                <div class="stat-value text-warning text-dark">
+                    {{ "%.1f"|format(metrics.decision_tree.precision_macro * 100) }}%
+                </div>
+                <div class="stat-desc">
+                    Recall: {{ "%.1f"|format(metrics.decision_tree.recall_macro * 100) }}% &middot; Tinggi: 100%
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
-            <div class="card h-100 shadow-sm stat-card danger">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="text-muted small fw-semibold">FITUR PREDIKTOR</div>
-                            <div class="fs-3 fw-bold text-danger">32 Variabel</div>
-                            <div class="small text-muted">G3 dibuang (Cegah Leakage)</div>
-                        </div>
-                        <div class="bg-danger-subtle text-danger p-3 rounded-circle">
-                            <i class="bi bi-shield-check fs-4"></i>
-                        </div>
-                    </div>
+            <div class="stat-card-modern danger-focus">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <div class="stat-label">Fitur Prediktor</div>
+                    <span class="badge badge-rendah">Bebas Leakage</span>
+                </div>
+                <div class="stat-value text-danger">
+                    32 Fitur
+                </div>
+                <div class="stat-desc">
+                    Fitur G3 dihapus dari prediktor
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RINGKASAN EKSEKUTIF: 5 POIN KRITERIA PENILAIAN UTS -->
-    <div class="card shadow-sm mb-4 border-0 border-start border-4 border-primary bg-white">
-        <div class="card-body p-4">
-            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-                    <i class="bi bi-patch-check-fill text-primary fs-4"></i>
-                    <span>Rangkuman 5 Kriteria Penilaian UTS & Kesesuaian Jurnal</span>
-                </h5>
-                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-semibold">
-                    <i class="bi bi-check-circle me-1"></i> Semua Kriteria Terpenuhi 100%
-                </span>
-            </div>
+    <!-- 3. RANGKUMAN 5 KRITERIA PENILAIAN UTS (Grid Cards Rapi & Tidak Padat) -->
+    <div class="card-modern mb-4">
+        <div class="card-modern-header">
+            <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-patch-check-fill text-primary" style="color: #145477 !important;"></i>
+                <span>Rangkuman 5 Ketentuan Penilaian UTS</span>
+            </span>
+            <span class="badge badge-tinggi">Terpenuhi 100%</span>
+        </div>
+        <div class="p-3">
             <div class="row g-3">
                 <div class="col-md-4 col-sm-6">
-                    <div class="p-3 rounded-3 bg-light border h-100">
-                        <div class="fw-bold text-danger mb-1 small d-flex align-items-center gap-1">
-                            <i class="bi bi-shield-x"></i> 1. Bebas Data Leakage (G3 Dibuang)
+                    <div class="kriteria-pill-card">
+                        <div class="kriteria-title text-danger">
+                            <i class="bi bi-shield-lock-fill"></i> 1. Bebas Data Leakage
                         </div>
-                        <p class="small text-muted mb-0">
-                            Fitur <code>G3</code> <strong>tidak dimasukkan</strong> sebagai input. Hanya 32 fitur prediktor (termasuk nilai awal G1 & G2) yang dipakai untuk memprediksi kategori.
+                        <p class="kriteria-text">
+                            Kolom <strong>G3 dihapus</strong> dari input karena dipakai sebagai label target. Hanya 32 fitur profil dan nilai awal (G1 &amp; G2) yang digunakan.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
-                    <div class="p-3 rounded-3 bg-light border h-100">
-                        <div class="fw-bold text-primary mb-1 small d-flex align-items-center gap-1">
-                            <i class="bi bi-graph-up"></i> 2. Evaluasi Model Komprehensif
+                    <div class="kriteria-pill-card">
+                        <div class="kriteria-title text-primary" style="color: #145477 !important;">
+                            <i class="bi bi-bar-chart-fill"></i> 2. Evaluasi Komprehensif
                         </div>
-                        <p class="small text-muted mb-0">
-                            Menyajikan <strong>Accuracy</strong> (85,33% CV / 83,12% Test), <strong>Precision</strong> (86,02%), <strong>Recall</strong> (84,36%), serta Confusion Matrix heatmap.
+                        <p class="kriteria-text">
+                            Lengkap dengan <strong>Accuracy</strong>, <strong>Precision</strong>, <strong>Recall</strong>, F1-Score, dan visualisasi heatmap Confusion Matrix.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
-                    <div class="p-3 rounded-3 bg-light border h-100">
-                        <div class="fw-bold text-success mb-1 small d-flex align-items-center gap-1">
-                            <i class="bi bi-person-check"></i> 3. Pengujian Data Baru
+                    <div class="kriteria-pill-card">
+                        <div class="kriteria-title text-success">
+                            <i class="bi bi-person-check-fill"></i> 3. Pengujian Data Baru
                         </div>
-                        <p class="small text-muted mb-0">
-                            Dilengkapi <strong>Form Input Manual</strong> 32 fitur dengan preset contoh + pengujian khusus pada <strong>10 data acak independen</strong> (7/10 benar).
+                        <p class="kriteria-text">
+                            Menyediakan <strong>Form Input Manual</strong> 32 fitur (dengan preset 1-klik) + pengujian <strong>10 data acak independen</strong> (akurasi 70%).
                         </p>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    <div class="p-3 rounded-3 bg-light border h-100">
-                        <div class="fw-bold text-warning text-dark mb-1 small d-flex align-items-center gap-1">
-                            <i class="bi bi-diagram-3"></i> 4. Visualisasi Pohon Keputusan (plot_tree)
+                    <div class="kriteria-pill-card">
+                        <div class="kriteria-title text-dark">
+                            <i class="bi bi-diagram-3-fill text-warning"></i> 4. Visualisasi Decision Tree
                         </div>
-                        <p class="small text-muted mb-0">
-                            Struktur aturan pohon divisualisasikan lengkap dengan <code>plot_tree()</code>. Menunjukkan nilai <code>G2</code> sebagai akar pemisah utama (&gt;87% kepentingan).
+                        <p class="kriteria-text">
+                            Visualisasi pohon keputusan menggunakan <code>plot_tree()</code> dan ranking <em>Feature Importance</em> yang memperlihatkan nilai G2 sebagai pemisah utama (&gt;87%).
                         </p>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
-                    <div class="p-3 rounded-3 bg-light border h-100">
-                        <div class="fw-bold text-info text-dark mb-1 small d-flex align-items-center gap-1">
-                            <i class="bi bi-table"></i> 5. Perbandingan dengan Hasil Jurnal
+                    <div class="kriteria-pill-card">
+                        <div class="kriteria-title text-dark">
+                            <i class="bi bi-arrow-left-right text-info"></i> 5. Komparasi dengan Jurnal
                         </div>
-                        <p class="small text-muted mb-0">
-                            Tabel perbandingan berdampingan antara penelitian jurnal RIGGS (Orange) dan implementasi project kami (Scikit-Learn).
+                        <p class="kriteria-text">
+                            Tabel perbandingan berdampingan antara penelitian jurnal RIGGS (Orange) dan implementasi project (Scikit-Learn).
                         </p>
                     </div>
                 </div>
@@ -176,233 +162,203 @@
         </div>
     </div>
 
-    <!-- TABEL PERBANDINGAN JURNAL VS HASIL TRAINING PROJECT -->
-    <div class="card shadow-sm mb-4 border-0">
-        <div class="card-header bg-white py-3 fw-bold d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <!-- 4. TABEL PERBANDINGAN HASIL JURNAL VS PROJECT (Clean & Modern Table) -->
+    <div class="card-modern mb-4">
+        <div class="card-modern-header">
             <span class="d-flex align-items-center gap-2">
-                <i class="bi bi-arrow-left-right text-primary"></i> Tabel Perbandingan Hasil Jurnal RIGGS vs Hasil Training Project
+                <i class="bi bi-table text-primary" style="color: #145477 !important;"></i>
+                <span>Tabel Perbandingan Hasil Penelitian Jurnal vs Hasil Project</span>
             </span>
-            <span class="badge bg-primary">Dataset: Student Performance (395 Siswa)</span>
+            <a href="{{ url_for('download_laporan_pdf') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Unduh Laporan PDF
+            </a>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover mb-0 align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th style="width: 25%;">Komponen Evaluasi</th>
-                            <th style="width: 28%;">Hasil Artikel Jurnal (Orange)</th>
-                            <th style="width: 28%;">Hasil Project Kami (Scikit-Learn)</th>
-                            <th>Keterangan / Analisis</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="fw-bold">Algoritma</td>
-                            <td>Decision Tree (Orange Tree Learner)</td>
-                            <td><span class="badge bg-primary">Decision Tree (Scikit-Learn)</span></td>
-                            <td>Konfigurasi sama: Gini, max_depth=5, min_samples_leaf=5</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Dataset</td>
-                            <td>Student Performance (Matematika)</td>
-                            <td><span class="badge bg-secondary">Student Performance (Matematika)</span></td>
-                            <td>Sumber UCI ML Repository / Kaggle (395 siswa)</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Fitur Input (Prediktor)</td>
-                            <td>32 Variabel (G3 Dihapus)</td>
-                            <td>32 Variabel (G3 Dihapus)</td>
-                            <td><span class="badge bg-success">Bebas Data Leakage</span> (G3 murni untuk target)</td>
-                        </tr>
-                        <tr class="table-info">
-                            <td class="fw-bold">Accuracy (Akurasi)</td>
-                            <td class="fw-bold fs-6 text-primary">87,10% (0,871)</td>
-                            <td class="fw-bold fs-6 text-success">
-                                {{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}% (10-Fold CV)<br>
-                                <span class="small fw-normal text-muted">{{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}% (Data Testing 20%)</span>
-                            </td>
-                            <td>Sangat konsisten &amp; mendekati jurnal acuan</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Precision (Presisi Makro)</td>
-                            <td class="fw-bold text-primary">87,10% (0,871)</td>
-                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.precision_macro * 100) }}%</td>
-                            <td>Presisi kelas Tinggi mencapai 100%</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Recall (Daya Ingat Makro)</td>
-                            <td class="fw-bold text-primary">87,10% (0,871)</td>
-                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.recall_macro * 100) }}%</td>
-                            <td>Recall kelas Tinggi mencapai 92,86%</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">F1-Score Makro</td>
-                            <td class="fw-bold text-primary">87,10% (0,871)</td>
-                            <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.f1_macro * 100) }}%</td>
-                            <td>Keseimbangan presisi dan recall sangat stabil</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Fitur Penentu Utama</td>
-                            <td>G2 dan G1</td>
-                            <td>G2 (87,74%) dan G1 (3,33%)</td>
-                            <td>Sesuai struktur pohon hierarki jurnal</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Kesalahan Ekstrem</td>
-                            <td>0 (Tidak pernah terjadi)</td>
-                            <td>0 (Rendah &harr; Tinggi = 0)</td>
-                            <td>Misklasifikasi hanya pada kategori tetangga</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="table-responsive">
+            <table class="table-clean">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Komponen Evaluasi</th>
+                        <th style="width: 25%;">Hasil Jurnal (Orange)</th>
+                        <th style="width: 25%;">Hasil Project (Scikit-Learn)</th>
+                        <th>Keterangan / Analisis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Algoritma</td>
+                        <td>Decision Tree (Orange Tree)</td>
+                        <td><span class="badge badge-primary-soft">Decision Tree (Scikit-Learn)</span></td>
+                        <td class="text-muted small">Parameter identik: Gini, max_depth=5, min_samples_leaf=5</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Dataset</td>
+                        <td>Student Performance (Matematika)</td>
+                        <td>Student Performance (Matematika)</td>
+                        <td class="text-muted small">UCI ML Repository / Kaggle (395 siswa)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Fitur Input</td>
+                        <td>32 Variabel (G3 Dihapus)</td>
+                        <td>32 Variabel (G3 Dihapus)</td>
+                        <td><span class="badge badge-tinggi">Bebas Data Leakage</span></td>
+                    </tr>
+                    <tr style="background-color: #f8fafc;">
+                        <td class="fw-bold text-dark">Accuracy (Akurasi)</td>
+                        <td class="fw-bold fs-6" style="color: #145477;">87,10% (0,871)</td>
+                        <td class="fw-bold fs-6 text-success">
+                            {{ "%.2f"|format(metrics.decision_tree.cv_10fold_all_mean * 100) }}% <span class="small fw-normal text-muted">(10-Fold CV)</span><br>
+                            <span class="small text-muted">{{ "%.2f"|format(metrics.decision_tree.accuracy * 100) }}% (Data Test 20%)</span>
+                        </td>
+                        <td class="text-muted small">Sangat konsisten &amp; mendekati jurnal (selisih ~1,7%)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Precision (Presisi Makro)</td>
+                        <td class="fw-bold" style="color: #145477;">87,10% (0,871)</td>
+                        <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.precision_macro * 100) }}%</td>
+                        <td class="text-muted small">Presisi kelas Tinggi mencapai 100%</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Recall (Daya Ingat Makro)</td>
+                        <td class="fw-bold" style="color: #145477;">87,10% (0,871)</td>
+                        <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.recall_macro * 100) }}%</td>
+                        <td class="text-muted small">Recall kelas Tinggi mencapai 92,86%</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">F1-Score Makro</td>
+                        <td class="fw-bold" style="color: #145477;">87,10% (0,871)</td>
+                        <td class="fw-bold text-success">{{ "%.2f"|format(metrics.decision_tree.f1_macro * 100) }}%</td>
+                        <td class="text-muted small">Keseimbangan performa antar-kelas sangat stabil</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Fitur Penentu Utama</td>
+                        <td>G2 (akar) dan G1</td>
+                        <td>G2 (87,74%) dan G1 (3,33%)</td>
+                        <td class="text-muted small">Capaian awal terbukti prediktor paling dominan</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Kesalahan Ekstrem</td>
+                        <td>0 kasus</td>
+                        <td><span class="badge badge-tinggi">0 kasus</span></td>
+                        <td class="text-muted small">Tidak pernah salah memprediksi Rendah &harr; Tinggi</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5. MODUL DAN ALUR KERJA SISTEM (Grid 6 Modul Bersih) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark">Modul dan Alur Kerja Sistem</h5>
+        <span class="text-muted small">Navigasi Terstruktur</span>
+    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-primary" style="color: #145477 !important;">
+                        <i class="bi bi-database fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">1. Dataset</div>
+                </div>
+                <p class="small text-muted mb-2">395 baris siswa, 5 kelompok variabel, dan sebaran kelas target.</p>
+                <a href="{{ url_for('dataset_view') }}" class="small fw-bold text-decoration-none" style="color: #145477;">
+                    Buka Dataset <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-info">
+                        <i class="bi bi-funnel fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">2. Preprocessing</div>
+                </div>
+                <p class="small text-muted mb-2">Pencegahan data leakage, OneHotEncoding, dan pemisahan data baru.</p>
+                <a href="{{ url_for('preprocessing_view') }}" class="small fw-bold text-decoration-none text-info">
+                    Lihat Preprocessing <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-warning">
+                        <i class="bi bi-gear-wide-connected fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">3. Pelatihan Model</div>
+                </div>
+                <p class="small text-muted mb-2">Pohon keputusan (max_depth=5), feature importance, &amp; model MLP.</p>
+                <a href="{{ url_for('training_view') }}" class="small fw-bold text-decoration-none text-warning text-dark">
+                    Pohon Keputusan <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-success">
+                        <i class="bi bi-graph-up fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">4. Evaluasi Model</div>
+                </div>
+                <p class="small text-muted mb-2">Confusion Matrix heatmap, presisi, recall, dan classification report.</p>
+                <a href="{{ url_for('evaluasi_view') }}" class="small fw-bold text-decoration-none text-success">
+                    Lihat Evaluasi <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-primary" style="color: #145477 !important;">
+                        <i class="bi bi-diagram-3 fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">5. Klasifikasi Siswa</div>
+                </div>
+                <p class="small text-muted mb-2">Form manual 32 fitur dengan preset contoh + upload CSV massal.</p>
+                <a href="{{ url_for('prediksi_view') }}" class="small fw-bold text-decoration-none" style="color: #145477;">
+                    Form Klasifikasi <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card-modern card-hover-modern h-100 p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="p-2 rounded-3 bg-light text-danger">
+                        <i class="bi bi-check2-circle fs-5"></i>
+                    </div>
+                    <div class="fw-bold text-dark">6. Uji Data Baru</div>
+                </div>
+                <p class="small text-muted mb-2">Validasi 10 data independen yang belum pernah dilihat model.</p>
+                <a href="{{ url_for('uji_baru_view') }}" class="small fw-bold text-decoration-none text-danger">
+                    Uji 10 Data Baru <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Feature Cards Grid -->
-    <h4 class="fw-bold mb-3 d-flex align-items-center gap-2">
-        <i class="bi bi-grid-fill text-primary"></i> Modul dan Alur Kerja Sistem
-    </h4>
-    <div class="row g-4 mb-4">
-        <!-- Dataset Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-primary">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-database-fill text-primary fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">1. Dataset Matematika</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Eksplorasi dataset 395 siswa dari UCI Machine Learning Repository. Dilengkapi deskripsi 5 kelompok variabel dan grafik distribusi target.
-                    </p>
-                    <a href="{{ url_for('dataset_view') }}" class="btn btn-sm btn-outline-primary fw-semibold">
-                        Buka Halaman Dataset <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
+    <!-- 6. INFORMASI JURNAL ACUAN (Ringkas & Rapi di Bagian Bawah Sebelum Footer) -->
+    <div class="reference-banner-compact mb-2">
+        <div class="d-flex align-items-center gap-3">
+            <div class="p-2 rounded-3 bg-light text-secondary d-none d-sm-block">
+                <i class="bi bi-bookmark-star-fill fs-5" style="color: #145477;"></i>
+            </div>
+            <div>
+                <div class="ref-title">Artikel Jurnal Ilmiah Referensi</div>
+                <p class="ref-citation">
+                    Sitanggang, E. J., Damanik, Y. R., Rumahorbo, E. L., &amp; MS, A. A. A. (2026). 
+                    <em>Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree pada Dataset Student Performance</em>. 
+                    <strong>RIGGS</strong>, 5(2), 22774–22783. DOI: 10.31004/riggs.v5i2.12193
+                </p>
             </div>
         </div>
-
-        <!-- Preprocessing Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-info">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-funnel-fill text-info fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">2. Preprocessing Data</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Tahapan pembentukan target Kategori_G3, pencegahan kebocoran data (drop G3), OneHotEncoding, dan pemisahan eksplisit 10 data baru.
-                    </p>
-                    <a href="{{ url_for('preprocessing_view') }}" class="btn btn-sm btn-outline-info fw-semibold">
-                        Lihat Tahapan Preprocessing <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pelatihan Model Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-warning">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-diagram-2-fill text-warning fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">3. Pelatihan Model</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Konfigurasi Decision Tree (max_depth=5, min_leaf=5), model pembanding MLP, visualisasi pohon keputusan, serta tombol latih ulang model.
-                    </p>
-                    <a href="{{ url_for('training_view') }}" class="btn btn-sm btn-outline-warning fw-semibold">
-                        Pelatihan & Pohon Keputusan <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Evaluasi Model Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-success">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-card-checklist text-success fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">4. Evaluasi & Analisis</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Confusion matrix heatmap, akurasi, precision, recall, F1-score, tabel classification report, serta panduan membaca metrik dalam Bahasa Indonesia.
-                    </p>
-                    <a href="{{ url_for('evaluasi_view') }}" class="btn btn-sm btn-outline-success fw-semibold">
-                        Lihat Hasil Evaluasi <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Prediksi Mandiri Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-primary">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-input-cursor-text text-primary fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">5. Prediksi (Single & Batch)</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Form input interaktif 32 fitur dengan validasi dan nilai default, serta fasilitas upload file CSV untuk prediksi massal dengan ekspor CSV.
-                    </p>
-                    <a href="{{ url_for('prediksi_view') }}" class="btn btn-sm btn-outline-primary fw-semibold">
-                        Form Prediksi Siswa <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Uji Data Baru Card -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-hover border-top border-4 border-danger">
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-check2-all text-danger fs-3"></i>
-                        <h5 class="card-title fw-bold mb-0">6. Pengujian Data Baru</h5>
-                    </div>
-                    <p class="card-text text-muted small">
-                        Uji 10 baris data independen yang belum pernah dilihat model sebelumnya, menampilkan perbandingan label aktual vs hasil prediksi.
-                    </p>
-                    <a href="{{ url_for('uji_baru_view') }}" class="btn btn-sm btn-outline-danger fw-semibold">
-                        Uji 10 Data Baru <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
+        <div class="d-flex gap-1 align-items-center flex-wrap">
+            <span class="badge badge-rendah">Rendah (0–9)</span>
+            <span class="badge badge-sedang">Sedang (10–14)</span>
+            <span class="badge badge-tinggi">Tinggi (15–20)</span>
         </div>
     </div>
 
-    <!-- Paper & Methodology Context -->
-    <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body p-4">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h5 class="fw-bold mb-2 text-dark">
-                        <i class="bi bi-bookmark-star-fill text-warning me-1"></i> Tentang Jurnal Acuan
-                    </h5>
-                    <p class="text-muted small mb-2">
-                        <strong>Judul:</strong> <em>Klasifikasi Prestasi Akademik Matematika Siswa Menggunakan Decision Tree pada Dataset Student Performance</em><br>
-                        <strong>Penulis:</strong> Elisabeth Jessica Sitanggang, Yeheskiel Ravena Damanik, Esther Laura Rumahorbo, Albert Adolf Angie MS<br>
-                        <strong>Jurnal:</strong> RIGGS (Journal of Artificial Intelligence and Digital Business), Vol. 5 No. 2 (2026), pp. 22774-22783. DOI: 10.31004/riggs.v5i2.12193
-                    </p>
-                    <p class="small text-secondary mb-0">
-                        Penelitian ini membuktikan bahwa Decision Tree mampu menghasilkan model klasifikasi multikelas yang akurat (akurasi 87,1%) dan sangat mudah diinterpretasikan oleh tenaga pendidik untuk mendeteksi siswa yang berisiko memperoleh prestasi rendah sedini mungkin setelah nilai evaluasi periode pertama (G1) dan kedua (G2) tersedia.
-                    </p>
-                </div>
-                <div class="col-lg-4 text-center mt-3 mt-lg-0">
-                    <div class="p-3 bg-light rounded-3 border">
-                        <div class="fw-bold text-dark small mb-1">Target Klasifikasi (Kategori_G3)</div>
-                        <div class="d-flex justify-content-center gap-1">
-                            <span class="badge badge-rendah px-2 py-1">Rendah (0 - 9)</span>
-                            <span class="badge badge-sedang px-2 py-1">Sedang (10 - 14)</span>
-                            <span class="badge badge-tinggi px-2 py-1">Tinggi (15 - 20)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}
-

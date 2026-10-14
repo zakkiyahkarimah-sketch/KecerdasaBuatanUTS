@@ -7,147 +7,161 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <div>
-            <h2 class="fw-bold mb-1"><i class="bi bi-check2-circle text-primary me-2"></i>Pengujian 10 Data Baru Independen</h2>
-            <p class="text-muted mb-0">Uji performa model Decision Tree pada 10 data siswa yang disisihkan secara terisolasi (tidak dipakai untuk training maupun testing).</p>
+            <h2 class="fw-bold mb-1" style="color: #145477;">Pengujian 10 Data Baru Independen</h2>
+            <p class="text-muted mb-0 small">Evaluasi generalisasi model Decision Tree pada 10 data siswa yang diisolasi secara acak (tidak dipakai saat training maupun testing).</p>
         </div>
         <div>
-            <a href="{{ url_for('download_data_baru') }}" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-download me-1"></i> Unduh data_baru.csv
+            <a href="{{ url_for('download_data_baru') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1" style="color: #145477; border-color: #145477;">
+                <i class="bi bi-download"></i> Unduh data_baru.csv
             </a>
         </div>
     </div>
 
-    <!-- Ringkasan Hasil Uji Data Baru -->
+    <!-- Ringkasan Hasil Uji Data Baru (Modern Stat Cards) -->
     <div class="row g-3 mb-4">
         <div class="col-md-4 col-sm-6">
-            <div class="card shadow-sm stat-card">
-                <div class="card-body">
-                    <div class="text-muted small fw-semibold">TOTAL DATA BARU</div>
-                    <div class="fs-4 fw-bold text-dark">{{ total_cases }} Siswa</div>
-                    <div class="small text-muted">Disisihkan dari 395 data awal (random_state=42)</div>
-                </div>
+            <div class="stat-card-modern primary-focus">
+                <div class="stat-label">Total Data Diuji</div>
+                <div class="stat-value" style="color: #145477;">{{ total_cases }} Siswa</div>
+                <div class="stat-desc">Diisolasi di awal (random_state=42)</div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6">
-            <div class="card shadow-sm stat-card success">
-                <div class="card-body">
-                    <div class="text-muted small fw-semibold">JUMLAH PREDIKSI BENAR</div>
-                    <div class="fs-4 fw-bold text-success">{{ correct_cases }} dari {{ total_cases }} Siswa</div>
-                    <div class="small text-muted">Prediksi model cocok dengan kategori aktual</div>
-                </div>
+            <div class="stat-card-modern success-focus">
+                <div class="stat-label">Prediksi Tepat</div>
+                <div class="stat-value text-success">{{ correct_cases }} / {{ total_cases }} Siswa</div>
+                <div class="stat-desc">Klasifikasi model sesuai label aktual</div>
             </div>
         </div>
         <div class="col-md-4 col-sm-12">
-            <div class="card shadow-sm stat-card warning">
-                <div class="card-body">
-                    <div class="text-muted small fw-semibold">AKURASI PENGUJIAN DATA BARU</div>
-                    <div class="fs-4 fw-bold text-warning">{{ "%.1f"|format(accuracy_rate) }}%</div>
-                    <div class="small text-muted">Kinerja generalisasi pada data tidak dikenal</div>
-                </div>
+            <div class="stat-card-modern warning-focus">
+                <div class="stat-label">Tingkat Akurasi</div>
+                <div class="stat-value text-warning text-dark">{{ "%.1f"|format(accuracy_rate) }}%</div>
+                <div class="stat-desc">Kemampuan generalisasi data baru</div>
             </div>
         </div>
     </div>
 
     <!-- Tabel Evaluasi Komparatif Data Baru -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-white py-3 fw-bold d-flex justify-content-between align-items-center">
+    <div class="card-modern mb-4">
+        <div class="card-modern-header">
             <span class="d-flex align-items-center gap-2">
-                <i class="bi bi-card-checklist text-primary"></i> Tabel Evaluasi Komparatif: Label Aktual vs Prediksi Model
+                <i class="bi bi-card-checklist text-primary" style="color: #145477 !important;"></i>
+                <span>Tabel Pengujian Komparatif: Label Aktual vs Hasil Klasifikasi Model</span>
             </span>
-            <span class="badge bg-primary">{{ correct_cases }}/{{ total_cases }} Benar ({{ "%.0f"|format(accuracy_rate) }}%)</span>
+            <span class="badge badge-tinggi">{{ correct_cases }}/{{ total_cases }} Tepat ({{ "%.0f"|format(accuracy_rate) }}%)</span>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mb-0 align-middle text-nowrap small">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Profil Siswa</th>
-                            <th>G1</th>
-                            <th>G2</th>
-                            <th>Failures</th>
-                            <th>Absences</th>
-                            <th>Nilai Akhir G3</th>
-                            <th>Kategori Aktual</th>
-                            <th>Prediksi Model</th>
-                            <th>Probabilitas Prediksi</th>
-                            <th>Status Evaluasi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in test_rows %}
-                        <tr class="{% if not row.is_correct %}table-danger bg-opacity-25{% endif %}">
-                            <td class="fw-bold">{{ loop.index }}</td>
-                            <td>
-                                <strong>{{ row.sex }}</strong>, {{ row.age }} thn ({{ row.school }})
-                            </td>
-                            <td>{{ row.G1 }}</td>
-                            <td class="fw-bold">{{ row.G2 }}</td>
-                            <td>{{ row.failures }}</td>
-                            <td>{{ row.absences }}</td>
-                            <td class="fw-bold text-center">{{ row.G3 }}</td>
-                            <td>
-                                {% if row.actual_label == 'Rendah' %}
-                                    <span class="badge badge-rendah">Rendah</span>
-                                {% elif row.actual_label == 'Sedang' %}
-                                    <span class="badge badge-sedang">Sedang</span>
-                                {% else %}
-                                    <span class="badge badge-tinggi">Tinggi</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if row.predicted_label == 'Rendah' %}
-                                    <span class="badge badge-rendah">Rendah</span>
-                                {% elif row.predicted_label == 'Sedang' %}
-                                    <span class="badge badge-sedang">Sedang</span>
-                                {% else %}
-                                    <span class="badge badge-tinggi">Tinggi</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div class="small fw-semibold">
-                                    {{ "%.1f"|format(row.highest_prob * 100) }}%
-                                </div>
-                                <div class="progress" style="height: 4px; width: 70px;">
-                                    <div class="progress-bar {% if row.predicted_label == 'Tinggi' %}bg-success{% elif row.predicted_label == 'Sedang' %}bg-warning{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{ row.highest_prob * 100 }}%;"></div>
-                                </div>
-                            </td>
-                            <td>
-                                {% if row.is_correct %}
-                                    <span class="badge bg-success d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-check-lg"></i> BENAR
-                                    </span>
-                                {% else %}
-                                    <span class="badge bg-danger d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-x-lg"></i> SALAH
-                                    </span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive">
+            <table class="table-clean text-nowrap">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Profil Siswa</th>
+                        <th>G1</th>
+                        <th>G2</th>
+                        <th>Failures</th>
+                        <th>Absences</th>
+                        <th class="text-center">Nilai Asli G3</th>
+                        <th>Kategori Aktual</th>
+                        <th>Hasil Klasifikasi</th>
+                        <th>Probabilitas</th>
+                        <th>Status Evaluasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in test_rows %}
+                    <tr class="{% if not row.is_correct %}bg-danger bg-opacity-10{% endif %}">
+                        <td class="fw-bold">{{ loop.index }}</td>
+                        <td>
+                            <strong>{{ row.sex }}</strong>, {{ row.age }} thn <span class="text-muted">({{ row.school }})</span>
+                        </td>
+                        <td>{{ row.G1 }}</td>
+                        <td class="fw-bold">{{ row.G2 }}</td>
+                        <td>{{ row.failures }}</td>
+                        <td>{{ row.absences }}</td>
+                        <td class="fw-bold text-center">{{ row.G3 }}</td>
+                        <td>
+                            {% if row.actual_label == 'Rendah' %}
+                                <span class="badge badge-rendah">Rendah</span>
+                            {% elif row.actual_label == 'Sedang' %}
+                                <span class="badge badge-sedang">Sedang</span>
+                            {% else %}
+                                <span class="badge badge-tinggi">Tinggi</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if row.predicted_label == 'Rendah' %}
+                                <span class="badge badge-rendah">Rendah</span>
+                            {% elif row.predicted_label == 'Sedang' %}
+                                <span class="badge badge-sedang">Sedang</span>
+                            {% else %}
+                                <span class="badge badge-tinggi">Tinggi</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="small fw-semibold mb-1">
+                                {{ "%.1f"|format(row.highest_prob * 100) }}%
+                            </div>
+                            <div class="progress" style="height: 4px; width: 70px;">
+                                <div class="progress-bar {% if row.predicted_label == 'Tinggi' %}bg-success{% elif row.predicted_label == 'Sedang' %}bg-warning{% else %}bg-danger{% endif %}" role="progressbar" style="width: {{ row.highest_prob * 100 }}%;"></div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if row.is_correct %}
+                                <span class="badge badge-tinggi d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-check-lg"></i> BENAR
+                                </span>
+                            {% else %}
+                                <span class="badge badge-rendah d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-x-lg"></i> SALAH
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- Catatan & Analisis Pengujian -->
-    <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body p-4">
-            <h5 class="fw-bold text-dark mb-2">
-                <i class="bi bi-lightbulb-fill text-warning me-1"></i> Analisis Hasil Pengujian Data Baru
-            </h5>
-            <p class="text-muted small mb-2">
-                1. <strong>Integritas Evaluasi:</strong> Kesepuluh baris data di atas diekstraksi secara acak menggunakan <code>random_state=42</code> sebelum proses <code>train_test_split</code> dilakukan. Artinya, model Decision Tree belum pernah melihat data ini sama sekali baik saat proses fitting maupun saat penentuan threshold.
-            </p>
-            <p class="text-muted small mb-2">
-                2. <strong>Ketepatan Klasifikasi:</strong> Model berhasil mengklasifikasikan <strong>{{ correct_cases }} dari {{ total_cases }} siswa dengan benar</strong> (tingkat akurasi {{ "%.1f"|format(accuracy_rate) }}%). Hal ini membuktikan kemampuan generalisasi yang solid dari konfigurasi pohon keputusan <code>max_depth=5</code> dan <code>min_samples_leaf=5</code>.
-            </p>
-            <p class="text-muted small mb-0">
-                3. <strong>Kesesuaian dengan Temuan Jurnal:</strong> Prediksi model sangat konsisten dengan aturan pohon yang menjadikan atribut <code>G2</code> sebagai indikator penentu utama, mencerminkan realitas capaian akademik siswa di mana hasil evaluasi tengah semester sangat berkorelasi dengan hasil akhir semester.
-            </p>
+    <div class="card-modern p-4">
+        <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle-fill text-primary" style="color: #145477 !important;"></i>
+            <span>Analisis Hasil Pengujian Data Baru</span>
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="kriteria-pill-card">
+                    <div class="kriteria-title text-dark">
+                        <i class="bi bi-shield-check text-success"></i> 1. Integritas Pengujian
+                    </div>
+                    <p class="kriteria-text">
+                        Kesepuluh data siswa di atas disisihkan sebelum <code>train_test_split</code>, sehingga model belum pernah melihat data ini saat fitting.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kriteria-pill-card">
+                    <div class="kriteria-title text-dark">
+                        <i class="bi bi-award-fill text-primary" style="color: #145477 !important;"></i> 2. Ketepatan Klasifikasi
+                    </div>
+                    <p class="kriteria-text">
+                        Model berhasil mengklasifikasikan <strong>{{ correct_cases }} dari {{ total_cases }} siswa ({{ "%.0f"|format(accuracy_rate) }}%)</strong> secara tepat, membuktikan daya generalisasi yang baik.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kriteria-pill-card">
+                    <div class="kriteria-title text-dark">
+                        <i class="bi bi-diagram-3-fill text-warning"></i> 3. Konsistensi Pohon
+                    </div>
+                    <p class="kriteria-text">
+                        Prediksi model sangat konsisten dengan aturan pohon yang menjadikan atribut <code>G2</code> sebagai indikator penentu utama (&gt;87%).
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
