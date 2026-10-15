@@ -112,7 +112,7 @@
                 <div class="col-md-3 col-sm-6">
                     <label for="failures" class="form-label">Kegagalan Kelas Lampau (0 - 3)</label>
                     <input type="number" class="form-control" id="failures" name="failures" min="0" max="3" value="{{ form_values.get('failures', 0) }}" required>
-                    <div class="form-text small">Jumlah kegagalan kelas sebelumnya.</div>
+                    <div class="form-text small">0 = Tidak pernah, 3 = &ge;3 kali gagal.</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="studytime" class="form-label">Waktu Belajar Mingguan</label>
@@ -323,26 +323,32 @@
                 <div class="col-md-3 col-sm-6">
                     <label for="famrel" class="form-label">Harmonisasi Keluarga (1 - 5)</label>
                     <input type="number" class="form-control" id="famrel" name="famrel" min="1" max="5" value="{{ form_values.get('famrel', 4) }}" required>
+                    <div class="form-text small">1 = Sangat buruk, 5 = Sangat baik</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="freetime" class="form-label">Waktu Luang (1 - 5)</label>
                     <input type="number" class="form-control" id="freetime" name="freetime" min="1" max="5" value="{{ form_values.get('freetime', 3) }}" required>
+                    <div class="form-text small">1 = Sangat sedikit, 5 = Sangat banyak</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="goout" class="form-label">Keluar Bersama Teman (1 - 5)</label>
                     <input type="number" class="form-control" id="goout" name="goout" min="1" max="5" value="{{ form_values.get('goout', 3) }}" required>
+                    <div class="form-text small">1 = Sangat jarang, 5 = Sangat sering</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="Dalc" class="form-label">Alkohol Hari Kerja (1 - 5)</label>
                     <input type="number" class="form-control" id="Dalc" name="Dalc" min="1" max="5" value="{{ form_values.get('Dalc', 1) }}" required>
+                    <div class="form-text small">1 = Sangat rendah, 5 = Sangat tinggi</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="Walc" class="form-label">Alkohol Akhir Pekan (1 - 5)</label>
                     <input type="number" class="form-control" id="Walc" name="Walc" min="1" max="5" value="{{ form_values.get('Walc', 1) }}" required>
+                    <div class="form-text small">1 = Sangat rendah, 5 = Sangat tinggi</div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <label for="health" class="form-label">Kondisi Kesehatan (1 - 5)</label>
                     <input type="number" class="form-control" id="health" name="health" min="1" max="5" value="{{ form_values.get('health', 4) }}" required>
+                    <div class="form-text small">1 = Sangat buruk, 5 = Sangat baik</div>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <label for="absences" class="form-label fw-bold">Jumlah Ketidakhadiran (Absensi)</label>
